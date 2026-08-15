@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ShieldIcon, BoltIcon, RupeeIcon } from '../icons/FeatureIcons'
 import { StarIcon } from '../icons/UiIcons'
 
@@ -7,20 +7,20 @@ const CARD =
 
 function Badge({ children, className, delay, float }) {
   return (
-    <motion.div
+    <m.div
       className={`${CARD} ${className}`}
       initial={{ opacity: 0, scale: 0.86, y: 14 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.6, delay, ease: [0.16, 0.84, 0.24, 1] }}
     >
-      <motion.div
+      <m.div
         animate={{ y: [0, -7, 0] }}
         transition={{ duration: float, repeat: Infinity, ease: 'easeInOut' }}
       >
         {children}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   )
 }
 

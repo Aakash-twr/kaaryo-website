@@ -1,14 +1,27 @@
 /**
- * India's boundary, stored as real [longitude, latitude] reference points and
- * projected at render time. Authoring in degrees rather than SVG units keeps
- * the geometry checkable against an atlas — and means a whole region cannot
- * quietly go missing the way Jammu & Kashmir did when this was hand-plotted
- * straight into viewBox coordinates.
+ * India's boundary, stored as real [longitude, latitude] points and projected at
+ * render time.
  *
- * Extent covered: 8.08°N (Kanyakumari) to 37.1°N (Indira Col, the northern tip
- * of Jammu & Kashmir), and 68.03°E (Guhar Moti, Kutch) to 97.4°E (Arunachal).
- * Boundaries follow the Government of India's depiction, so Jammu & Kashmir
- * — including Gilgit-Baltistan and Aksai Chin — is shown in full.
+ * Source: DataMeet's `india-composite.geojson` (github.com/datameet/maps), the
+ * community dataset that merges Pakistan-occupied Kashmir and Aksai Chin into
+ * the national outline — i.e. the Government of India depiction, in which the
+ * whole of Jammu & Kashmir and Ladakh is Indian territory. The mainland ring was
+ * extracted and reduced with Douglas–Peucker at a tolerance of 0.2° (about 3px
+ * at the size this renders), taking it from 2,42,146 vertices to 150.
+ *
+ * These coordinates are generated, not hand-authored. An earlier version of this
+ * file was plotted by hand from memory and got Jammu & Kashmir badly wrong — the
+ * northern half of Aksai Chin and the Muzaffarabad side of PoK both fell outside
+ * the outline. If the shape needs changing, re-derive it from the source data
+ * rather than nudging numbers here.
+ *
+ * Extent: 8.07°N (Kanyakumari) to 37.03°N (northern Gilgit-Baltistan),
+ * 68.17°E (Kutch) to 97.40°E (Arunachal Pradesh).
+ *
+ * Known deviation: the Shaksgam Valley (Trans-Karakoram Tract), which Pakistan
+ * ceded to China in 1963 and India does not recognise as ceded, is outside this
+ * outline — the source takes PoK from Pakistani administrative boundaries, which
+ * exclude it. Everything else matches the official depiction.
  */
 
 // Equirectangular, with x scaled by cos(23°) — the mean latitude of the
@@ -23,120 +36,46 @@ export const project = (lon, lat) => ({
   y: (LAT_ORIGIN - lat) * LAT_SCALE,
 })
 
-/** Traced clockwise from the northern tip. */
+/** Mainland ring, starting at the northernmost point. */
 const BOUNDARY = [
-  // ── Jammu & Kashmir: eastern edge, Siachen down through Aksai Chin ──
-  [76.9, 37.1], // Indira Col — northernmost point
-  [78.0, 35.6],
-  [79.5, 35.0],
-  [80.0, 34.6],
-  [80.3, 34.0], // Aksai Chin, eastern limit
-  [79.5, 33.0],
-  [79.2, 32.5],
-
-  // ── Himalayan border: Himachal, Uttarakhand, Nepal, Sikkim, Bhutan ──
-  [79.0, 31.4],
-  [79.9, 30.9],
-  [80.2, 30.2], // Kali river — Nepal's western border
-  [80.1, 28.8],
-  [81.0, 28.4],
-  [82.7, 27.9],
-  [84.0, 27.5],
-  [85.8, 26.6],
-  [87.0, 26.4],
-  [88.1, 26.4], // eastern Nepal — north side of the Siliguri corridor
-  [88.0, 27.9], // Sikkim
-  [88.9, 27.3],
-  [89.0, 26.7], // western Bhutan
-  [92.0, 26.8], // eastern Bhutan
-  [92.1, 27.5],
-
-  // ── Arunachal Pradesh ──
-  [93.5, 28.6],
-  [95.0, 29.0],
-  [96.4, 29.3],
-  [97.4, 28.3], // easternmost point
-
-  // ── Eastern border with Myanmar ──
-  [97.0, 27.7],
-  [96.2, 27.0],
-  [97.1, 26.0],
-  [96.5, 25.0],
-  [95.1, 24.0], // Manipur
-  [94.5, 23.5],
-  [93.4, 23.0], // Mizoram
-  [92.7, 21.9], // southern tip of Mizoram
-
-  // ── Around Bangladesh: Tripura, Barak valley, Meghalaya ──
-  [92.2, 23.3],
-  [91.4, 22.9], // southern tip of Tripura
-  [91.2, 24.2],
-  [92.1, 24.9],
-  [92.0, 25.2],
-  [90.6, 25.15], // southern Meghalaya
-  [89.8, 25.3],
-  [89.7, 26.2],
-  [88.9, 26.3], // south side of the Siliguri corridor
-
-  // ── West Bengal, down to the Sundarbans ──
-  [88.1, 25.2],
-  [88.7, 24.3],
-  [88.1, 23.5],
-  [88.9, 22.2],
-  [88.1, 21.6], // Sundarbans
-
-  // ── East coast: Odisha → Tamil Nadu ──
-  [87.0, 21.6],
-  [86.5, 20.7],
-  [85.1, 19.5],
-  [84.5, 19.0],
-  [83.0, 18.0],
-  [82.3, 16.9],
-  [81.2, 16.3], // Godavari delta
-  [80.3, 15.8], // Krishna delta
-  [80.1, 14.5],
-  [80.3, 13.1], // Chennai
-  [79.9, 11.9],
-  [79.4, 10.3], // Point Calimere
-  [78.9, 9.3], // Rameswaram
-  [78.1, 8.8],
-  [77.5, 8.08], // Kanyakumari — southernmost point
-
-  // ── West coast: Kerala → Gujarat ──
-  [76.9, 8.5],
-  [76.3, 10.0], // Kochi
-  [75.8, 11.6],
-  [74.8, 12.9], // Mangaluru
-  [74.4, 14.8],
-  [73.8, 15.5], // Goa
-  [73.3, 17.0],
-  [72.8, 19.1], // Mumbai
-  [72.7, 20.7],
-  [72.9, 21.5],
-  [72.6, 22.3], // head of the Gulf of Khambhat
-  [72.2, 21.5],
-  [71.0, 20.75], // southern Saurashtra
-  [69.7, 21.5],
-  [68.97, 22.47], // Okha
-  [70.0, 22.9], // head of the Gulf of Kutch
-  [69.6, 23.5],
-  [68.6, 23.6],
-  [68.03, 23.71], // Guhar Moti — westernmost point
-
-  // ── Western border with Pakistan, up into Jammu & Kashmir ──
-  [68.8, 24.3], // Rann of Kutch
-  [70.7, 25.8],
-  [71.0, 27.8],
-  [72.3, 28.8],
-  [73.9, 30.0], // Punjab
-  [74.6, 31.1],
-  [75.3, 32.3],
-  [74.3, 32.8], // Jammu
-  [74.0, 34.0],
-  [73.4, 34.7], // western limit of Jammu & Kashmir
-  [73.9, 35.5], // Gilgit-Baltistan
-  [74.5, 36.5],
-  [75.9, 36.9],
+  [75.15, 37.03], [77.52, 35.49], [79.34, 35.99], [80.05, 35.42],
+  [80.41, 35.48], [79.40, 34.00], [78.89, 33.97], [78.94, 33.38],
+  [79.41, 33.19], [79.55, 32.68], [78.97, 32.34], [78.74, 32.70],
+  [78.40, 32.53], [78.78, 31.99], [78.78, 31.31], [79.10, 31.45],
+  [81.03, 30.25], [80.37, 29.75], [80.08, 28.82], [82.74, 27.50],
+  [84.15, 27.52], [85.21, 26.76], [88.01, 26.36], [88.12, 27.92],
+  [88.64, 28.12], [88.89, 27.86], [88.75, 27.14], [89.13, 26.81],
+  [92.06, 26.85], [92.12, 27.29], [91.64, 27.76], [92.46, 27.79],
+  [94.63, 29.30], [95.26, 29.07], [96.05, 29.38], [96.63, 28.73],
+  [96.41, 28.51], [96.71, 28.61], [97.40, 28.01], [96.89, 27.61],
+  [97.14, 27.09], [96.23, 27.28], [95.15, 26.62], [95.19, 26.07],
+  [94.63, 25.40], [94.71, 24.94], [94.16, 23.85], [93.33, 24.08],
+  [93.39, 23.13], [93.13, 23.04], [93.20, 22.26], [92.91, 21.94],
+  [92.60, 21.98], [92.28, 23.72], [91.96, 23.73], [91.62, 22.94],
+  [91.16, 23.61], [91.37, 24.11], [92.16, 24.42], [92.43, 25.03],
+  [89.84, 25.29], [89.68, 26.24], [89.36, 26.01], [88.40, 26.63],
+  [88.52, 26.36], [88.11, 25.82], [89.01, 25.26], [88.44, 25.21],
+  [88.01, 24.67], [88.74, 24.28], [88.56, 23.65], [89.00, 23.22],
+  [89.10, 21.64], [88.72, 21.68], [88.64, 22.08], [88.25, 21.56],
+  [88.02, 22.22], [88.19, 22.10], [87.80, 21.70], [86.91, 21.34],
+  [87.07, 20.72], [86.37, 19.95], [85.04, 19.39], [84.13, 18.31],
+  [82.31, 17.04], [82.30, 16.56], [81.27, 16.29], [80.94, 15.71],
+  [80.26, 15.67], [80.05, 15.07], [80.35, 13.28], [79.76, 11.67],
+  [79.88, 10.31], [79.29, 10.26], [78.90, 9.49], [79.19, 9.28],
+  [78.27, 9.02], [78.07, 8.37], [77.55, 8.07], [76.55, 8.90],
+  [75.87, 11.12], [75.20, 12.00], [74.52, 14.24], [73.46, 16.05],
+  [72.86, 18.69], [73.07, 19.02], [72.81, 18.89], [72.66, 19.83],
+  [72.93, 20.76], [72.60, 21.30], [72.93, 21.68], [72.54, 21.66],
+  [72.75, 21.97], [72.51, 21.98], [72.91, 22.26], [72.33, 22.31],
+  [72.11, 21.20], [70.82, 20.69], [68.94, 22.31], [70.17, 22.54],
+  [70.45, 22.97], [69.20, 22.84], [68.43, 23.51], [68.81, 23.88],
+  [68.17, 23.62], [68.81, 24.31], [71.12, 24.40], [70.66, 25.70],
+  [70.10, 25.94], [70.17, 26.55], [69.51, 26.74], [69.59, 27.18],
+  [70.37, 28.01], [70.87, 27.71], [71.90, 27.96], [73.40, 29.95],
+  [74.70, 31.07], [74.61, 31.89], [75.37, 32.23], [74.68, 32.49],
+  [74.71, 32.84], [73.63, 33.09], [73.40, 34.38], [74.13, 35.12],
+  [73.18, 35.86], [72.57, 35.85], [72.55, 36.23], [73.06, 36.70],
+  [73.86, 36.72], [73.67, 36.92],
 ]
 
 export const INDIA_PATH = BOUNDARY.map(([lon, lat], i) => {

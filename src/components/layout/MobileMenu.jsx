@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { NavLink } from 'react-router-dom'
 import { NAV_LINKS } from './navLinks'
 import Logo from '../icons/Logo'
@@ -40,7 +40,7 @@ export default function MobileMenu({ open, onClose }) {
       {open && (
         <div className="fixed inset-0 z-[100] lg:hidden">
           {/* Outside click target */}
-          <motion.div
+          <m.div
             className="absolute inset-0 bg-ink-900/45 backdrop-blur-[3px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -49,7 +49,7 @@ export default function MobileMenu({ open, onClose }) {
             onClick={onClose}
           />
 
-          <motion.div
+          <m.div
             ref={panelRef}
             role="dialog"
             aria-modal="true"
@@ -74,14 +74,14 @@ export default function MobileMenu({ open, onClose }) {
             </div>
 
             <nav className="flex-1 overflow-y-auto px-6 py-6">
-              <motion.ul
+              <m.ul
                 className="space-y-1"
                 initial="hidden"
                 animate="show"
                 variants={{ hidden: {}, show: { transition: { staggerChildren: 0.055, delayChildren: 0.12 } } }}
               >
                 {[{ label: 'Home', to: '/' }, ...NAV_LINKS].map((link) => (
-                  <motion.li
+                  <m.li
                     key={link.to}
                     variants={{
                       hidden: { opacity: 0, x: 24 },
@@ -102,9 +102,9 @@ export default function MobileMenu({ open, onClose }) {
                       {link.label}
                       <ArrowRightIcon size={18} className="opacity-45" />
                     </NavLink>
-                  </motion.li>
+                  </m.li>
                 ))}
-              </motion.ul>
+              </m.ul>
 
               <div className="mt-8 rounded-3xl border border-ink-900/8 bg-white p-5">
                 <p className="flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink-500">
@@ -137,7 +137,7 @@ export default function MobileMenu({ open, onClose }) {
                 {SITE.supportEmail}
               </a>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
     </AnimatePresence>

@@ -7,8 +7,42 @@ export const SITE = {
   phone: '+91 98765 43210',
   address: {
     company: 'Kaaryo Technologies Pvt Ltd',
-    line1: '4th Floor, Sunshine Tower',
-    line2: 'Andheri East, Mumbai 400069',
+    line1: 'Banjara Hills',
+    line2: 'Hyderabad, India',
+    // Structured equivalents, used only by the LocalBusiness JSON-LD.
+    // postalCode is blank until the full street address is known; the
+    // builder drops empty fields rather than emitting a hollow one.
+    locality: 'Hyderabad',
+    region: 'Telangana',
+    postalCode: '',
+    country: 'IN',
+  },
+
+  /* ----------------------------------------------------------------
+     Structured-data honesty switches.
+
+     Search engines treat JSON-LD as a factual claim about the business,
+     so both of these stay false until the underlying data is real:
+
+     contactVerified — gates `telephone` and `address` in the
+       LocalBusiness markup. The number above is the stock filler Indian
+       number; publishing it to Google is worse than publishing nothing.
+
+     metricsVerified — gates `aggregateRating`. Review markup that is not
+       backed by real, collected ratings breaches Google's structured-data
+       policy and can earn a manual action against the whole domain.
+
+     The site copy is unaffected either way — only the machine-readable
+     claims are withheld.
+     ---------------------------------------------------------------- */
+  contactVerified: false,
+  metricsVerified: false,
+
+  /** Populate and they appear as `sameAs` in the Organization markup. */
+  social: {
+    instagram: '',
+    linkedin: '',
+    twitter: '',
   },
 }
 
@@ -17,19 +51,59 @@ export const SITE = {
  * uses for the boundary, so a pin can never drift off the landmass.
  * `anchor` places the label to the left ('end') or right ('start') of the pin.
  */
+/**
+ * Worker and job counts add up to the headline figures in STATS below —
+ * 500+ verified workers and ~38,000 jobs. Change one and the other stops
+ * being true, so keep the arithmetic intact.
+ */
 export const LIVE_CITIES = [
-  { name: 'Mumbai', workers: '210+ pros', jobs: '18,400 jobs', lon: 72.877, lat: 19.076, anchor: 'end' },
+  { name: 'Hyderabad', workers: '210+ pros', jobs: '18,400 jobs', lon: 78.486, lat: 17.385, anchor: 'start' },
   { name: 'Delhi', workers: '180+ pros', jobs: '13,900 jobs', lon: 77.209, lat: 28.614, anchor: 'start' },
   { name: 'Bangalore', workers: '110+ pros', jobs: '6,100 jobs', lon: 77.594, lat: 12.972, anchor: 'end' },
 ]
 
 export const SOON_CITIES = [
   { name: 'Ahmedabad', lon: 72.571, lat: 23.023, anchor: 'end' },
-  // Anchored right so its label clears Mumbai's, just north-west of it.
-  { name: 'Pune', lon: 73.857, lat: 18.52, anchor: 'start' },
-  { name: 'Hyderabad', lon: 78.486, lat: 17.385, anchor: 'start' },
+  { name: 'Mumbai', lon: 72.877, lat: 19.076, anchor: 'end' },
   { name: 'Chennai', lon: 80.27, lat: 13.083, anchor: 'start' },
   { name: 'Kolkata', lon: 88.364, lat: 22.573, anchor: 'start' },
+]
+
+/**
+ * Payment options, shared by the How it works section and the LocalBusiness
+ * JSON-LD so the two cannot disagree. Icons are mapped by slug in
+ * components/howitworks/PaymentMethods.jsx — this file stays import-free so the
+ * build script can read it from Node.
+ *
+ * `schema` is the label used in the `paymentAccepted` field. It exists
+ * separately from `name` because the UI wants the short human word ("Card")
+ * while search engines want the specific instruments behind it.
+ */
+export const PAYMENT_METHODS = [
+  {
+    slug: 'upi',
+    name: 'UPI',
+    schema: 'UPI',
+    note: 'GPay, PhonePe, Paytm — one tap',
+  },
+  {
+    slug: 'card',
+    name: 'Card',
+    schema: 'Credit Card, Debit Card',
+    note: 'Credit or debit, saved securely',
+  },
+  {
+    slug: 'netbanking',
+    name: 'Net banking',
+    schema: 'Net Banking',
+    note: 'All major Indian banks',
+  },
+  {
+    slug: 'cash',
+    name: 'Cash',
+    schema: 'Cash',
+    note: 'Pay the pro on completion',
+  },
 ]
 
 export const STATS = [

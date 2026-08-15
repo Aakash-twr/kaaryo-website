@@ -21,7 +21,7 @@ export default function CoverageSection() {
               title={
                 <>
                   Three cities live.
-                  <br className="hidden sm:block" /> Five more this year.
+                  <br className="hidden sm:block" /> Four more this year.
                 </>
               }
               body="Kaaryo launches a city only once there are enough verified professionals in it to actually keep the 20-minute promise. Depth first, map later."

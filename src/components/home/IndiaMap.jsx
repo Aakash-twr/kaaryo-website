@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useId } from 'react'
 import { INDIA_PATH, project } from './indiaGeometry'
 import { LIVE_CITIES, SOON_CITIES } from '../../data/site'
@@ -14,7 +14,7 @@ export default function IndiaMap() {
       viewBox="-15 -2 110 105"
       className="h-full w-full"
       role="img"
-      aria-label="Kaaryo coverage across India: live in Mumbai, Delhi and Bangalore, with Ahmedabad, Pune, Hyderabad, Chennai and Kolkata coming soon"
+      aria-label="Kaaryo coverage across India: live in Hyderabad, Delhi and Bangalore, with Ahmedabad, Mumbai, Chennai and Kolkata coming soon"
     >
       <defs>
         <linearGradient id={`${id}-land`} x1="0" y1="0" x2="0.6" y2="1">
@@ -27,7 +27,7 @@ export default function IndiaMap() {
       </defs>
 
       {/* soft halo */}
-      <motion.path
+      <m.path
         d={INDIA_PATH}
         fill="none"
         stroke="#3EBB9E"
@@ -40,7 +40,7 @@ export default function IndiaMap() {
         transition={{ duration: 1.2 }}
       />
 
-      <motion.path
+      <m.path
         d={INDIA_PATH}
         fill={`url(#${id}-land)`}
         stroke="#E2E8F0"
@@ -59,7 +59,7 @@ export default function IndiaMap() {
         const { x, y } = project(city.lon, city.lat)
         const labelX = city.anchor === 'end' ? x - 2.8 : x + 2.8
         return (
-          <motion.g
+          <m.g
             key={city.name}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -85,7 +85,7 @@ export default function IndiaMap() {
             >
               {city.name}
             </text>
-          </motion.g>
+          </m.g>
         )
       })}
 
@@ -94,7 +94,7 @@ export default function IndiaMap() {
         const { x, y } = project(city.lon, city.lat)
         const labelX = city.anchor === 'end' ? x - 3.9 : x + 3.9
         return (
-          <motion.g
+          <m.g
             key={city.name}
             initial={{ opacity: 0, scale: 0.4 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -104,7 +104,7 @@ export default function IndiaMap() {
           >
             {/* Pulse scales the marker rather than animating `r`, so the
                 attribute stays a valid length at every frame. */}
-            <motion.circle
+            <m.circle
               cx={x}
               cy={y}
               r={LIVE_R}
@@ -135,7 +135,7 @@ export default function IndiaMap() {
             >
               {city.workers}
             </text>
-          </motion.g>
+          </m.g>
         )
       })}
     </svg>

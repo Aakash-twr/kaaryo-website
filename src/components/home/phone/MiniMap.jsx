@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useId } from 'react'
 
 const ROUTE =
@@ -56,7 +56,7 @@ export default function MiniMap() {
 
         {/* route */}
         <path d={ROUTE} stroke="#FFFFFF" strokeWidth="7" strokeLinecap="round" fill="none" />
-        <motion.path
+        <m.path
           d={ROUTE}
           stroke={`url(#${id}-route)`}
           strokeWidth="3.4"
@@ -84,13 +84,13 @@ export default function MiniMap() {
         <circle cx="22" cy="126" r="4.4" fill="#0F172A" opacity="0.3" />
 
         {/* worker travelling the route */}
-        <motion.g
+        <m.g
           animate={{ x: RX, y: RY }}
           transition={{ duration: 7.2, ease: 'linear', repeat: Infinity, times: [0, 0.18, 0.28, 0.4, 0.5, 0.68, 0.78, 0.9, 1] }}
         >
           <circle r="12" fill="#3EBB9E" opacity="0.18" />
           <circle r="7.2" fill="#3EBB9E" stroke="#fff" strokeWidth="2.4" />
-        </motion.g>
+        </m.g>
       </svg>
 
       <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full bg-white/92 px-2.5 py-1 font-mono text-[0.6rem] font-medium tracking-[0.1em] text-ink-700 uppercase shadow-sm backdrop-blur">

@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { formatDuration, priceOf } from '../../data/services'
 import { ClockIcon } from '../icons/FeatureIcons'
 import { ArrowRightIcon } from '../icons/UiIcons'
 
 export default function ServiceRow({ item, accent, index }) {
   return (
-    <motion.li
+    <m.li
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.42, delay: index * 0.055, ease: [0.16, 0.84, 0.24, 1] }}
@@ -33,6 +33,6 @@ export default function ServiceRow({ item, accent, index }) {
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-900/10 text-ink-500 transition-all duration-300 group-hover:border-ink-900 group-hover:bg-brand-700 group-hover:text-paper-50">
         <ArrowRightIcon size={15} />
       </span>
-    </motion.li>
+    </m.li>
   )
 }

@@ -25,7 +25,7 @@ export const FAQS = [
   },
   {
     q: 'What areas does Kaaryo currently serve?',
-    a: 'We are currently live in Mumbai, Delhi, and Bangalore. We are rapidly expanding to Hyderabad, Pune, Chennai, and more cities in 2025.',
+    a: 'We are currently live in Hyderabad, Delhi, and Bangalore. We are rapidly expanding to Ahmedabad, Mumbai, Chennai, and Kolkata through 2026.',
   },
   {
     q: 'How do I pay for services?',
@@ -40,3 +40,24 @@ export const FAQS = [
     a: 'Download the Kaaryo Worker app, complete the onboarding process including identity verification and skill assessment, and you will be live within 3 to 5 working days.',
   },
 ]
+
+/* ------------------------------------------------------------------
+   Which questions each page shows.
+
+   These live here rather than as slice() calls inside the pages because
+   the FAQPage JSON-LD is built from the same constants. Google requires
+   FAQ markup to match the content actually visible on the page, so the
+   two must not be able to drift apart.
+   ------------------------------------------------------------------ */
+export const HOME_FAQS = FAQS.slice(0, 6)
+export const HOW_IT_WORKS_FAQS = FAQS.slice(1, 7)
+export const SERVICES_FAQS = FAQS.slice(2, 8)
+export const CONTACT_FAQS = FAQS.slice(4)
+
+/** Path → the exact set rendered there, for the structured-data builder. */
+export const FAQS_BY_PATH = {
+  '/': HOME_FAQS,
+  '/how-it-works': HOW_IT_WORKS_FAQS,
+  '/services': SERVICES_FAQS,
+  '/contact': CONTACT_FAQS,
+}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import ServiceRow from './ServiceRow'
 import Button from '../ui/Button'
 import { CATEGORIES, PLATFORM_FEE, priceOf } from '../../data/services'
@@ -65,7 +65,7 @@ export default function ServiceTabs() {
       <div className="mt-8 grid gap-6 lg:grid-cols-[0.78fr_1.22fr] lg:gap-7">
         {/* Category summary */}
         <AnimatePresence mode="wait">
-          <motion.aside
+          <m.aside
             key={cat.slug}
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -121,7 +121,7 @@ export default function ServiceTabs() {
               Book {cat.name.toLowerCase()}
               <ArrowRightIcon size={16} />
             </Button>
-          </motion.aside>
+          </m.aside>
         </AnimatePresence>
 
         {/* Price list */}
@@ -142,11 +142,11 @@ export default function ServiceTabs() {
           </div>
 
           <AnimatePresence mode="wait">
-            <motion.ul key={cat.slug} className="space-y-2.5" exit={{ opacity: 0 }}>
+            <m.ul key={cat.slug} className="space-y-2.5" exit={{ opacity: 0 }}>
               {cat.items.map((item, i) => (
                 <ServiceRow key={item.name} item={item} accent={cat.accent} index={i} />
               ))}
-            </motion.ul>
+            </m.ul>
           </AnimatePresence>
 
           <p className="mt-6 rounded-2xl border border-dashed border-ink-900/14 bg-paper-100 px-5 py-4 text-[0.86rem] leading-relaxed text-ink-600">

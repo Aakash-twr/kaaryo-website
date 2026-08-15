@@ -1,0 +1,7 @@
+# Kaaryo — https://kaaryo.vercel.app
+# Everything here is public marketing content; nothing is disallowed.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://kaaryo.vercel.app/sitemap.xml

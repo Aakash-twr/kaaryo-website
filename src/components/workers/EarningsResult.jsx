@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { inr } from './earningsModel'
 import { TrophyIcon, WalletIcon, ClockIcon, RupeeIcon } from '../icons/FeatureIcons'
 
@@ -24,7 +24,7 @@ export default function EarningsResult({ result }) {
       </p>
 
       <div className="relative mt-3 flex items-end gap-3">
-        <motion.p
+        <m.p
           key={result.weekly}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,7 +34,7 @@ export default function EarningsResult({ result }) {
           className="font-display text-[3.1rem] leading-none font-extrabold tracking-[-0.02em] text-paper-50 sm:text-[3.7rem]"
         >
           {inr(result.weekly)}
-        </motion.p>
+        </m.p>
         <span className="mb-2 font-mono text-[0.72rem] tracking-[0.12em] text-ink-400 uppercase">
           / week
         </span>

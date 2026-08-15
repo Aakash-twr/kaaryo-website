@@ -90,7 +90,7 @@ const SECTIONS = [
     id: 'governing-law',
     heading: 'Governing law and disputes',
     paragraphs: [
-      'These terms are governed by the laws of India. Disputes are subject to the exclusive jurisdiction of the courts of Mumbai, Maharashtra.',
+      'These terms are governed by the laws of India. Disputes are subject to the exclusive jurisdiction of the courts of Hyderabad, Telangana.',
       'Before any formal proceeding, please write to us — the overwhelming majority of disputes are resolved by our support team within a few days.',
     ],
   },

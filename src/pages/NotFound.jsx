@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import Button from '../components/ui/Button'
 import { Eyebrow } from '../components/ui/SectionHeading'
 import { ArrowRightIcon } from '../components/icons/UiIcons'
@@ -16,19 +16,19 @@ export default function NotFound() {
       </div>
 
       <div className="container-k relative text-center">
-        <motion.span
+        <m.span
           className="inline-flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-700 text-brand-300"
           initial={{ opacity: 0, scale: 0.7, rotate: -12 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 15 }}
         >
-          <motion.span
+          <m.span
             animate={{ opacity: [1, 0.35, 1, 0.6, 1] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           >
             <ElectricianIcon size={38} />
-          </motion.span>
-        </motion.span>
+          </m.span>
+        </m.span>
 
         <p className="font-display mt-8 text-[5.5rem] leading-none font-extrabold tracking-[-0.06em] text-ink-900/12 sm:text-[8rem]">
           404

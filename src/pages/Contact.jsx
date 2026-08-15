@@ -3,7 +3,7 @@ import ContactForm from '../components/contact/ContactForm'
 import ContactInfo from '../components/contact/ContactInfo'
 import FaqSection from '../components/home/FaqSection'
 import CtaBand from '../components/ui/CtaBand'
-import { FAQS } from '../data/faqs'
+import { CONTACT_FAQS } from '../data/faqs'
 
 export default function Contact() {
   return (
@@ -29,7 +29,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <FaqSection items={FAQS.slice(4)} />
+      <FaqSection items={CONTACT_FAQS} />
 
       <CtaBand
         eyebrow="Or skip the form"

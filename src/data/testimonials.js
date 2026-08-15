@@ -1,7 +1,7 @@
 export const CUSTOMER_TESTIMONIALS = [
   {
     name: 'Priya S.',
-    city: 'Mumbai',
+    city: 'Hyderabad',
     service: 'Short Circuit Repair',
     quote:
       'The electrician arrived in just 15 minutes. Fixed my short circuit quickly and cleanly. Highly recommend Kaaryo.',
@@ -22,7 +22,7 @@ export const CUSTOMER_TESTIMONIALS = [
   },
   {
     name: 'Suresh P.',
-    city: 'Pune',
+    city: 'Bangalore',
     service: 'Pipe Fitting',
     quote:
       'Plumber came within 20 minutes as promised. Fixed a leaking pipe that had been bothering us for days. Great service.',
@@ -47,7 +47,7 @@ export const WORKER_TESTIMONIALS = [
   {
     name: 'Ramesh K.',
     role: 'Electrician',
-    city: 'Mumbai',
+    city: 'Hyderabad',
     stat: 'Income doubled in 3 months',
     quote:
       'I used to struggle finding consistent work. With Kaaryo I get 6 to 8 jobs every day. My income has doubled in 3 months.',

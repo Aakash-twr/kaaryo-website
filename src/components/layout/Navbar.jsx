@@ -31,7 +31,7 @@ export default function Navbar() {
           {/* Short form on phones so the line never truncates mid-word. */}
           <span className="sm:hidden">3 cities live · 20-minute arrival</span>
           <span className="max-sm:hidden">
-            Live in Mumbai · Delhi · Bangalore — average arrival 20 minutes
+            Live in Hyderabad · Delhi · Bangalore — average arrival 20 minutes
           </span>
         </div>
       </div>

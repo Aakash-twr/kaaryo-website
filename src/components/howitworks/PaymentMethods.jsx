@@ -2,13 +2,15 @@ import SectionHeading from '../ui/SectionHeading'
 import Reveal, { RevealGroup, RevealItem } from '../ui/Reveal'
 import { WalletIcon, RupeeIcon, LockIcon, BuildingIcon } from '../icons/FeatureIcons'
 import { PLATFORM_FEE, priceOf } from '../../data/services'
+import { PAYMENT_METHODS } from '../../data/site'
 
-const METHODS = [
-  { icon: WalletIcon, name: 'UPI', note: 'GPay, PhonePe, Paytm — one tap' },
-  { icon: LockIcon, name: 'Card', note: 'Credit or debit, saved securely' },
-  { icon: BuildingIcon, name: 'Net banking', note: 'All major Indian banks' },
-  { icon: RupeeIcon, name: 'Cash', note: 'Pay the pro on completion' },
-]
+/** Icons live here rather than in the data file, which stays import-free. */
+const PAYMENT_ICONS = {
+  upi: WalletIcon,
+  card: LockIcon,
+  netbanking: BuildingIcon,
+  cash: RupeeIcon,
+}
 
 export default function PaymentMethods() {
   return (
@@ -28,18 +30,21 @@ export default function PaymentMethods() {
 
           <div>
             <RevealGroup className="grid grid-cols-2 gap-4">
-              {METHODS.map((m) => (
-                <RevealItem
-                  key={m.name}
-                  className="group rounded-3xl border border-ink-900/8 bg-paper-100 p-5 transition-all duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-[0_24px_50px_-36px_rgba(15,23,42,0.5)] sm:p-6"
-                >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-700 p-3 text-brand-300 transition-transform duration-500 group-hover:-rotate-6">
-                    <m.icon size={22} />
-                  </span>
-                  <p className="mt-4 text-[1.02rem] font-bold text-ink-900">{m.name}</p>
-                  <p className="mt-1 text-[0.84rem] leading-snug text-ink-500">{m.note}</p>
-                </RevealItem>
-              ))}
+              {PAYMENT_METHODS.map((method) => {
+                const Icon = PAYMENT_ICONS[method.slug]
+                return (
+                  <RevealItem
+                    key={method.slug}
+                    className="group rounded-3xl border border-ink-900/8 bg-paper-100 p-5 transition-all duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-[0_24px_50px_-36px_rgba(15,23,42,0.5)] sm:p-6"
+                  >
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-700 p-3 text-brand-300 transition-transform duration-500 group-hover:-rotate-6">
+                      <Icon size={22} />
+                    </span>
+                    <p className="mt-4 text-[1.02rem] font-bold text-ink-900">{method.name}</p>
+                    <p className="mt-1 text-[0.84rem] leading-snug text-ink-500">{method.note}</p>
+                  </RevealItem>
+                )
+              })}
             </RevealGroup>
 
             <Reveal delay={0.12} className="mt-4 rounded-3xl border border-dashed border-ink-900/14 bg-paper-100 px-6 py-5">

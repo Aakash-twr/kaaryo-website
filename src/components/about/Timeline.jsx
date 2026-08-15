@@ -23,8 +23,8 @@ const MILESTONES = [
   {
     year: 'Next',
     tag: 'Expanding',
-    title: 'Five more cities',
-    body: 'Mumbai, Pune, Chennai, Kolkata and Ahmedabad — each opening only once local supply can hold the arrival promise.',
+    title: 'Four more cities',
+    body: 'Mumbai, Chennai, Kolkata and Ahmedabad — each opening only once local supply can hold the arrival promise.',
   },
 ]
 

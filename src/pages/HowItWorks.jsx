@@ -6,7 +6,7 @@ import SafetySection from '../components/home/SafetySection'
 import FaqSection from '../components/home/FaqSection'
 import CtaBand from '../components/ui/CtaBand'
 import TickerStrip from '../components/home/TickerStrip'
-import { FAQS } from '../data/faqs'
+import { HOW_IT_WORKS_FAQS } from '../data/faqs'
 
 export default function HowItWorks() {
   return (
@@ -34,7 +34,7 @@ export default function HowItWorks() {
       <BookingTimeline />
       <PaymentMethods />
       <SafetySection />
-      <FaqSection items={FAQS.slice(1, 7)} />
+      <FaqSection items={HOW_IT_WORKS_FAQS} />
 
       <CtaBand
         eyebrow="Try it once"

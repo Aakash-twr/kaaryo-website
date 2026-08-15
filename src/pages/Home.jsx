@@ -9,7 +9,7 @@ import CoverageSection from '../components/home/CoverageSection'
 import WorkerCtaSection from '../components/home/WorkerCtaSection'
 import FaqSection from '../components/home/FaqSection'
 import CtaBand from '../components/ui/CtaBand'
-import { FAQS } from '../data/faqs'
+import { HOME_FAQS } from '../data/faqs'
 
 export default function Home() {
   return (
@@ -23,7 +23,7 @@ export default function Home() {
       <TestimonialsSection />
       <CoverageSection />
       <WorkerCtaSection />
-      <FaqSection items={FAQS.slice(0, 6)} />
+      <FaqSection items={HOME_FAQS} />
       <CtaBand />
     </>
   )

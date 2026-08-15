@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import SuccessState from './SuccessState'
 import { ChevronDownIcon, ArrowRightIcon } from '../icons/UiIcons'
 import { LIVE_CITIES, SOON_CITIES } from '../../data/site'
@@ -12,7 +12,7 @@ const TOPICS = [
   'Something else',
 ]
 
-const EMPTY = { name: '', contact: '', city: 'Mumbai', topic: TOPICS[0], message: '' }
+const EMPTY = { name: '', contact: '', city: 'Hyderabad', topic: TOPICS[0], message: '' }
 
 const FIELD =
   'w-full rounded-2xl border border-ink-900/12 bg-white px-4 py-3.5 text-[0.95rem] text-ink-900 transition-colors placeholder:text-ink-400 hover:border-ink-900/25'
@@ -53,7 +53,7 @@ export default function ContactForm() {
         {sent ? (
           <SuccessState key="success" name={form.name} onReset={reset} />
         ) : (
-          <motion.form
+          <m.form
             key="form"
             onSubmit={handleSubmit}
             initial={{ opacity: 0 }}
@@ -181,7 +181,7 @@ export default function ContactForm() {
                 />
               </button>
             </div>
-          </motion.form>
+          </m.form>
         )}
       </AnimatePresence>
     </div>

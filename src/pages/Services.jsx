@@ -6,7 +6,7 @@ import FaqSection from '../components/home/FaqSection'
 import Reveal, { RevealGroup, RevealItem } from '../components/ui/Reveal'
 import CounterNumber from '../components/ui/CounterNumber'
 import { CATEGORIES, PLATFORM_FEE, priceOf } from '../data/services'
-import { FAQS } from '../data/faqs'
+import { SERVICES_FAQS } from '../data/faqs'
 import { RupeeIcon, ClockIcon, ShieldIcon, HeadsetIcon } from '../components/icons/FeatureIcons'
 
 const PROMISES = [
@@ -113,7 +113,7 @@ export default function Services() {
         </div>
       </section>
 
-      <FaqSection items={FAQS.slice(2, 8)} />
+      <FaqSection items={SERVICES_FAQS} />
       <CtaBand
         eyebrow="Pick a trade"
         title={

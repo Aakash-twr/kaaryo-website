@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 const EASE = [0.16, 0.84, 0.24, 1]
 
@@ -11,7 +11,7 @@ export default function Reveal({
   className = '',
   as = 'div',
 }) {
-  const MotionTag = motion[as] || motion.div
+  const MotionTag = m[as] || m.div
   return (
     <MotionTag
       className={className}
@@ -28,7 +28,7 @@ export default function Reveal({
 /** Parent that staggers its <RevealItem> children. */
 export function RevealGroup({ children, className = '', stagger = 0.09, delay = 0.05, amount = 0.15 }) {
   return (
-    <motion.div
+    <m.div
       className={className}
       initial="hidden"
       whileInView="show"
@@ -39,7 +39,7 @@ export function RevealGroup({ children, className = '', stagger = 0.09, delay = 
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -49,7 +49,7 @@ export const revealItem = {
 }
 
 export function RevealItem({ children, className = '', as = 'div', ...rest }) {
-  const MotionTag = motion[as] || motion.div
+  const MotionTag = m[as] || m.div
   return (
     <MotionTag className={className} variants={revealItem} {...rest}>
       {children}

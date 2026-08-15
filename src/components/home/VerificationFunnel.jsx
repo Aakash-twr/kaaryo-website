@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 const ROWS = [
   { label: 'Applied', pct: 100, value: '3,120' },
@@ -25,7 +25,7 @@ export default function VerificationFunnel() {
               </span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-paper-50/8">
-              <motion.div
+              <m.div
                 // The final row is the outcome, so it gets the brightest fill;
                 // the stages above recede into deeper green.
                 className={`h-full rounded-full ${

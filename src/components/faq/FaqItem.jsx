@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { PlusIcon } from '../icons/UiIcons'
 
 export default function FaqItem({ id, question, answer, isOpen, onToggle, index }) {
@@ -31,7 +31,7 @@ export default function FaqItem({ id, question, answer, isOpen, onToggle, index 
             {question}
           </span>
 
-          <motion.span
+          <m.span
             aria-hidden="true"
             className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
               isOpen
@@ -42,13 +42,13 @@ export default function FaqItem({ id, question, answer, isOpen, onToggle, index 
             transition={{ duration: 0.34, ease: [0.16, 0.84, 0.24, 1] }}
           >
             <PlusIcon size={16} strokeWidth={2} />
-          </motion.span>
+          </m.span>
         </button>
       </h3>
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div
+          <m.div
             key="panel"
             id={`${id}-panel`}
             role="region"
@@ -67,7 +67,7 @@ export default function FaqItem({ id, question, answer, isOpen, onToggle, index 
                 <p className="text-[0.95rem] leading-relaxed text-ink-600">{answer}</p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

@@ -67,6 +67,15 @@ const SECTIONS = [
     ],
   },
   {
+    id: 'analytics',
+    heading: 'Analytics and cookies',
+    paragraphs: [
+      'This website sets no cookies and does not track you across other sites. We measure two things, both through Vercel, the company that hosts this site: how many people visit each page and which link they arrived from, and how quickly pages actually load on real devices.',
+      'Neither measurement uses a cookie, a device identifier, or anything that singles you out. Page views are counted without building a profile of you, and the loading measurements are timing numbers with no personal data attached. Because nothing here identifies you, there is no consent banner to click.',
+      'Should we ever adopt analytics that do identify visitors, we will ask for your consent first and update this section before switching it on.',
+    ],
+  },
+  {
     id: 'security',
     heading: 'How we protect your data',
     paragraphs: [
