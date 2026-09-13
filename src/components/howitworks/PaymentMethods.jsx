@@ -1,7 +1,6 @@
 import SectionHeading from '../ui/SectionHeading'
 import Reveal, { RevealGroup, RevealItem } from '../ui/Reveal'
 import { WalletIcon, RupeeIcon, LockIcon, BuildingIcon } from '../icons/FeatureIcons'
-import { PLATFORM_FEE, priceOf } from '../../data/services'
 import { PAYMENT_METHODS } from '../../data/site'
 
 /** Icons live here rather than in the data file, which stays import-free. */
@@ -25,7 +24,7 @@ export default function PaymentMethods() {
                 <br className="hidden sm:block" /> however you like.
               </>
             }
-            body={`Nothing is charged when you book. You settle up once the job is done and you are happy with it. The only addition to the service price is a ${priceOf(PLATFORM_FEE)} platform fee per booking.`}
+            body="Nothing is charged when you book. You settle up once the job is done and you are happy with it. Nothing gets added on the way either — no platform fee, no booking fee, no surcharge with a creative name."
           />
 
           <div>

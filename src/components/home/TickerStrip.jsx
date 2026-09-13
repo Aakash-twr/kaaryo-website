@@ -4,7 +4,7 @@ import { BoltIcon } from '../icons/FeatureIcons'
 const PROMISES = [
   '20-minute arrival',
   'Aadhaar-verified pros',
-  'Fixed transparent prices',
+  'Transparent upfront prices',
   'Live worker tracking',
   'Satisfaction guaranteed',
   'Cash, UPI or card',

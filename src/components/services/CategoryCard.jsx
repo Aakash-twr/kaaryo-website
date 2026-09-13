@@ -2,11 +2,10 @@ import { Link } from 'react-router-dom'
 import { SERVICE_ICONS } from '../icons/ServiceIcons'
 import { ArrowUpRightIcon } from '../icons/UiIcons'
 import { ClockIcon } from '../icons/FeatureIcons'
-import { priceOf } from '../../data/services'
+import { startingPriceLabel } from '../../data/services'
 
 export default function CategoryCard({ cat, to = '/services' }) {
   const CatIcon = SERVICE_ICONS[cat.slug]
-  const from = Math.min(...cat.items.map((i) => i.price))
   const fastest = Math.min(...cat.items.map((i) => i.mins))
 
   return (
@@ -43,7 +42,7 @@ export default function CategoryCard({ cat, to = '/services' }) {
             Starting at
           </p>
           <p className="font-display text-[1.5rem] leading-none font-extrabold tracking-[-0.03em] text-ink-900">
-            {priceOf(from)}
+            {startingPriceLabel(cat)}
           </p>
         </div>
         <div className="text-right">

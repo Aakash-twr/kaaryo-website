@@ -2,7 +2,7 @@ import SectionHeading from '../ui/SectionHeading'
 import Button from '../ui/Button'
 import CategoryCard from '../services/CategoryCard'
 import { RevealGroup, RevealItem } from '../ui/Reveal'
-import { CATEGORIES } from '../../data/services'
+import { CATEGORIES, TOTAL_SERVICES } from '../../data/services'
 import { ArrowRightIcon } from '../icons/UiIcons'
 
 export default function ServicesSection() {
@@ -20,7 +20,7 @@ export default function ServicesSection() {
                 <br className="hidden sm:block" /> someone here can fix.
               </>
             }
-            body="Twenty-three services with fixed prices and honest durations. Pick the job, see the cost, and a verified professional is on the way."
+            body={`${TOTAL_SERVICES} services with the price shown up front and honest durations. Pick the job, see the cost, and a verified professional is on the way.`}
           />
           <Button to="/services" variant="dark" size="md" className="shrink-0">
             Browse all services

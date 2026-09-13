@@ -39,7 +39,7 @@ export const ROUTES = [
     crumb: 'Services',
     title: 'Home Services & Fixed Prices | Kaaryo',
     description:
-      'Electrical, cleaning, cooking, plumbing, carpentry and painting at fixed prices from ₹199. You see the exact cost before booking, plus a flat ₹20 platform fee.',
+      'Electrical, cleaning, cooking, plumbing, carpentry and painting from ₹79. You see the exact cost before booking, and we charge no platform fee.',
     priority: '0.9',
     changefreq: 'weekly',
   },

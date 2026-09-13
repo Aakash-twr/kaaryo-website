@@ -143,12 +143,36 @@ function faqNode(path) {
 }
 
 /**
- * One Service per category, each carrying its real fixed-price offers.
+ * One Service per category, each carrying its real catalogue offers.
  *
  * aggregateRating is gated on metricsVerified and deliberately attached here
  * rather than to Organization or LocalBusiness — Google ignores self-serving
  * review markup on those two types.
  */
+/** Maps a catalogue item's price shape onto schema.org's price vocabulary. */
+function offerPrice(item) {
+  if (item.unit === 'hour') {
+    return {
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: String(item.price),
+        priceCurrency: 'INR',
+        unitCode: 'HUR',
+      },
+    }
+  }
+  if (item.from) {
+    return {
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        minPrice: String(item.price),
+        priceCurrency: 'INR',
+      },
+    }
+  }
+  return { price: String(item.price) }
+}
+
 function serviceNodes() {
   const areaServed = LIVE_CITIES.map((c) => cityNode(c.name))
 
@@ -172,12 +196,14 @@ function serviceNodes() {
       : {}),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: `${cat.name} — fixed prices`,
+      name: `${cat.name} — prices`,
       itemListElement: cat.items.map((item) => ({
         '@type': 'Offer',
         name: item.name,
-        price: String(item.price),
         priceCurrency: 'INR',
+        // A "from" or hourly rate is not a flat price: saying so plainly keeps
+        // the rich result honest and stops Merchant-style price mismatches.
+        ...offerPrice(item),
         itemOffered: {
           '@type': 'Service',
           name: item.name,

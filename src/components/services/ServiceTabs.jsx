@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 import ServiceRow from './ServiceRow'
 import Button from '../ui/Button'
-import { CATEGORIES, PLATFORM_FEE, priceOf } from '../../data/services'
+import { CATEGORIES, startingItem, startingPriceLabel } from '../../data/services'
+import { useBooking } from '../../context/BookingContext'
 import { SERVICE_ICONS } from '../icons/ServiceIcons'
 import { ArrowRightIcon, CheckIcon } from '../icons/UiIcons'
 import { ShieldIcon, SparkleIcon } from '../icons/FeatureIcons'
@@ -48,7 +49,7 @@ export default function ServiceTabs() {
   const [active, setActive] = useState(0)
   const cat = CATEGORIES[active]
   const CatIcon = SERVICE_ICONS[cat.slug]
-  const from = Math.min(...cat.items.map((i) => i.price))
+  const { openBooking } = useBooking()
 
   return (
     <div>
@@ -99,10 +100,11 @@ export default function ServiceTabs() {
                 Starting at
               </p>
               <p className="font-display text-[2.6rem] leading-none font-extrabold tracking-[-0.02em] text-paper-50">
-                {priceOf(from)}
+                {startingPriceLabel(cat)}
               </p>
               <p className="mt-2 text-[0.8rem] text-ink-400">
-                + {priceOf(PLATFORM_FEE)} platform fee per booking. Nothing else.
+                No platform fee, no booking fee, no &ldquo;convenience&rdquo; fee.
+                That number is the number.
               </p>
             </div>
 
@@ -117,7 +119,11 @@ export default function ServiceTabs() {
               ))}
             </ul>
 
-            <Button to="/contact" size="md" className="relative mt-7 w-full">
+            <Button
+              size="md"
+              className="relative mt-7 w-full"
+              onClick={() => openBooking(startingItem(cat), cat)}
+            >
               Book {cat.name.toLowerCase()}
               <ArrowRightIcon size={16} />
             </Button>
@@ -133,7 +139,7 @@ export default function ServiceTabs() {
         >
           <div className="mb-4 flex items-baseline justify-between">
             <h3 className="font-mono text-[0.66rem] tracking-[0.2em] text-ink-500 uppercase">
-              {cat.items.length} services · fixed pricing
+              {cat.items.length} services · tap to book
             </h3>
             <p className="inline-flex items-center gap-1.5 font-mono text-[0.66rem] tracking-[0.12em] text-success-600 uppercase">
               <ShieldIcon size={13} />
@@ -144,7 +150,7 @@ export default function ServiceTabs() {
           <AnimatePresence mode="wait">
             <m.ul key={cat.slug} className="space-y-2.5" exit={{ opacity: 0 }}>
               {cat.items.map((item, i) => (
-                <ServiceRow key={item.name} item={item} accent={cat.accent} index={i} />
+                <ServiceRow key={item.name} item={item} cat={cat} index={i} />
               ))}
             </m.ul>
           </AnimatePresence>

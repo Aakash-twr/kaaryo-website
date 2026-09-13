@@ -5,7 +5,7 @@ import { ArrowRightIcon, CheckIcon } from '../icons/UiIcons'
 
 const GUARANTEES = [
   'Late? Booking is free',
-  'Fixed prices, no surprises',
+  'Upfront prices, no surprises',
   'Redo or refund in 24 hours',
 ]
 

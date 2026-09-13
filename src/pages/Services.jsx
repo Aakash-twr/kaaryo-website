@@ -5,7 +5,7 @@ import CtaBand from '../components/ui/CtaBand'
 import FaqSection from '../components/home/FaqSection'
 import Reveal, { RevealGroup, RevealItem } from '../components/ui/Reveal'
 import CounterNumber from '../components/ui/CounterNumber'
-import { CATEGORIES, PLATFORM_FEE, priceOf } from '../data/services'
+import { CATEGORIES, TOTAL_SERVICES } from '../data/services'
 import { SERVICES_FAQS } from '../data/faqs'
 import { RupeeIcon, ClockIcon, ShieldIcon, HeadsetIcon } from '../components/icons/FeatureIcons'
 
@@ -13,7 +13,7 @@ const PROMISES = [
   {
     icon: RupeeIcon,
     title: 'The price you see is the price you pay',
-    body: `Every service is fixed-rate. The only addition is a ${priceOf(PLATFORM_FEE)} platform fee per booking — shown before you confirm.`,
+    body: 'Predictable jobs are fixed-rate. Larger ones show a starting price and are quoted before any work begins — never after. And nothing is added on top: every app seems to charge a platform fee, and we never worked out what yours would be buying.',
   },
   {
     icon: ClockIcon,
@@ -33,7 +33,6 @@ const PROMISES = [
 ]
 
 export default function Services() {
-  const totalServices = CATEGORIES.reduce((n, c) => n + c.items.length, 0)
   const cheapest = Math.min(...CATEGORIES.flatMap((c) => c.items.map((i) => i.price)))
 
   return (
@@ -43,15 +42,15 @@ export default function Services() {
         crumb="Services"
         title={
           <>
-            Fixed prices.
+            Honest prices.
             <br className="hidden sm:block" /> Honest durations.
           </>
         }
-        body="Twenty-three services across six trades, each with a rate that does not move once the worker arrives. Choose a category to see everything it covers."
+        body={`${TOTAL_SERVICES} services across six trades. Fixed rates on the predictable jobs, a clear starting price on the ones that need a look first. Choose a category to see everything it covers.`}
       >
         <div className="mt-9 flex flex-wrap gap-3">
           {[
-            { value: totalServices, suffix: '', label: 'services live' },
+            { value: TOTAL_SERVICES, suffix: '', label: 'services live' },
             { value: 6, suffix: '', label: 'trades covered' },
             { value: cheapest, prefix: '₹', label: 'lowest price' },
           ].map((s) => (
@@ -105,9 +104,10 @@ export default function Services() {
 
           <Reveal delay={0.1} className="mt-10">
             <p className="mx-auto max-w-2xl text-center text-[0.88rem] leading-relaxed text-ink-500">
-              Prices shown are for standard urban homes in our live cities. Unusually
-              large jobs are quoted in the app before you confirm — never after the
-              work has started.
+              Prices shown are labour for standard urban homes in our live cities.
+              Materials and replacement parts are billed separately unless a package
+              says all-inclusive. Unusually large jobs are quoted in the app before
+              you confirm — never after the work has started.
             </p>
           </Reveal>
         </div>
@@ -118,11 +118,11 @@ export default function Services() {
         eyebrow="Pick a trade"
         title={
           <>
-            Twenty-three services.
+            {TOTAL_SERVICES} services.
             <br className="hidden sm:block" /> One tap each.
           </>
         }
-        body="Choose what needs doing, confirm the fixed price, and track a verified professional to your door."
+        body="Choose what needs doing, confirm the price, and track a verified professional to your door."
       />
     </>
   )

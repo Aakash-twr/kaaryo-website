@@ -13,7 +13,7 @@ export const FAQS = [
   },
   {
     q: 'How are prices determined?',
-    a: 'Prices are fixed and transparent. You see the exact price before confirming the booking. There are no hidden charges. The only addition is a small platform fee of ₹20 per booking.',
+    a: 'You see the exact price before confirming the booking. Predictable jobs carry a fixed labour price; bigger jobs show a starting price and are quoted before work begins. Materials and replacement parts are billed separately unless the package says all-inclusive. And there is no platform fee — everyone else charges one, we could never explain what it was for, so we do not.',
   },
   {
     q: 'Can I choose a specific worker?',

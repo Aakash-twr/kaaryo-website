@@ -22,7 +22,7 @@ const SECTIONS = [
     id: 'bookings',
     heading: 'Bookings and pricing',
     paragraphs: [
-      'Every service has a fixed price shown before you confirm. A platform fee of ₹20 is added per booking. No other charges are applied without your explicit confirmation inside the app.',
+      'Every service shows its price before you confirm — a fixed labour price on standard jobs, or a starting price where the final cost depends on scope. Where a starting price applies, the professional gives you a full quote before beginning, and you can decline. Materials and replacement parts are billed separately unless the package states all-inclusive. Kaaryo charges no platform, booking or convenience fee. No other charges are applied without your explicit confirmation inside the app.',
       'If a job turns out to be materially different from what was booked — a larger scope, or a different service entirely — the professional will raise a revised quote in the app. Work continues only after you accept it. Nothing is ever charged for time the professional simply took longer than expected.',
     ],
   },

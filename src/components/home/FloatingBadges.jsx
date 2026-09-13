@@ -69,7 +69,7 @@ export default function FloatingBadges() {
           </span>
           <div>
             <p className="text-[0.78rem] leading-tight font-bold text-ink-900">
-              Fixed prices
+              Upfront prices
             </p>
             <p className="font-mono text-[0.58rem] tracking-[0.1em] text-ink-500 uppercase">
               no surprise bills

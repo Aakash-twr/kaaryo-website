@@ -6,6 +6,7 @@ import Analytics from './components/Analytics'
 import ScrollToTop from './components/layout/ScrollToTop'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import BookingProvider from './context/BookingContext'
 
 /**
  * Every page is split into its own chunk, so a visitor reading the home page no
@@ -53,35 +54,37 @@ export default function App() {
      * bundle rather than a blank screen.
      */
     <LazyMotion features={domAnimation} strict={import.meta.env.DEV}>
-      <Seo />
-      <ScrollToTop />
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:rounded-full focus:bg-brand-700 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-paper-50"
-      >
-        Skip to content
-      </a>
+      <BookingProvider>
+        <Seo />
+        <ScrollToTop />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:rounded-full focus:bg-brand-700 focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-paper-50"
+        >
+          Skip to content
+        </a>
 
-      <Navbar />
+        <Navbar />
 
-      <main id="main">
-        <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/for-workers" element={<ForWorkers />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </main>
+        <main id="main">
+          <Suspense fallback={<RouteFallback />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/for-workers" element={<ForWorkers />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </main>
 
-      <Footer />
-      <Analytics />
+        <Footer />
+        <Analytics />
+      </BookingProvider>
     </LazyMotion>
   )
 }

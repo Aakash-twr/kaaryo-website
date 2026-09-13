@@ -20,6 +20,7 @@ The dev server prints a local URL (default `http://localhost:5173`).
 | `npm run dev` | Start the Vite dev server with hot reload |
 | `npm run build` | Bundle with Vite, then emit per-route HTML and the sitemap |
 | `npm run preview` | Serve the production build locally |
+| `npm run preview:email` | Render the booking email into `dist/` for eyeballing |
 
 Note that `npm run preview` resolves routes differently from Vercel: it will
 serve `/about.html` but falls back to the SPA shell for `/about`. That is a
@@ -33,8 +34,12 @@ src/
     Seo.jsx     Keeps the head in sync during client-side navigation
   data/         Site copy and content (services, testimonials, FAQs, site info)
     seo.js      Per-route titles, descriptions and sitemap weights
+  context/
+    BookingContext.jsx Opens the booking modal from anywhere in the tree
   lib/
     structuredData.js  JSON-LD builders
+    quote.js           Turns a catalogue item into the priced breakdown
+    email.js           EmailJS wrapper + confirmation template variables
   pages/        Route-level pages
   App.jsx       Router and layout shell
   main.jsx      Entry point
@@ -43,6 +48,46 @@ scripts/
 ```
 
 Site-wide details — company name, contact info, coverage cities, and headline stats — live in `src/data/site.js`.
+
+## Booking
+
+Every row in the services list opens a booking modal: the customer sees an
+itemised price breakdown, fills in name, mobile, email and address, and gets a
+confirmation email.
+
+**Setup.** Copy `.env.example` to `.env.local` and fill in three EmailJS values.
+The full walkthrough is in [`docs/emailjs-template.md`](docs/emailjs-template.md);
+the email itself is [`docs/emailjs-booking-template.html`](docs/emailjs-booking-template.html),
+ready to paste into the EmailJS dashboard.
+
+```bash
+cp .env.example .env.local   # then fill in and restart `npm run dev`
+```
+
+**Deploying.** `.env.local` is gitignored and never reaches Vercel. Add the
+same three variables under **Project → Settings → Environment Variables**
+(Production *and* Preview) or the deployed build ships without them and every
+booking fails closed. Keeping them out of git is deploy hygiene rather than
+secrecy — all three are readable in the shipped JavaScript either way, which is
+how EmailJS is designed. The real protection is the domain allowlist described
+in `.env.example`.
+
+Two things worth knowing:
+
+- **Nothing is stored.** There is no backend. The only record of a booking is
+  the email EmailJS sends, so set a **Bcc** to an ops inbox on the template —
+  otherwise a customer gets confirmed and nobody at Kaaryo finds out.
+- **Prices come from one place.** `src/lib/quote.js` builds the breakdown that
+  the modal renders *and* the rows that go into the email, so the screen and
+  the inbox cannot quote different totals. Prices themselves live in
+  `src/data/services.js`.
+
+`npm run preview:email` renders that template with real catalogue data — one
+file per price shape — so you can check it in a browser without sending mail.
+
+If the EmailJS variables are missing the form does not pretend to succeed — it
+shows the customer an error and the support number, and in dev it tells you
+which variables to set.
 
 ## SEO and sharing
 

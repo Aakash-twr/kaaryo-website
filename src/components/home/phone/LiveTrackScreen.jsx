@@ -83,7 +83,7 @@ export default function LiveTrackScreen() {
           <p className="text-[0.68rem] leading-tight font-semibold text-ink-700">
             Fan Installation
           </p>
-          <p className="font-mono text-[0.78rem] font-bold text-ink-900">₹299</p>
+          <p className="font-mono text-[0.78rem] font-bold text-ink-900">₹89</p>
         </div>
         <button
           type="button"

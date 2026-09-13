@@ -5,7 +5,7 @@ const BEATS = [
   {
     t: '00:00',
     title: 'You confirm the booking',
-    body: 'Service picked, address confirmed, fixed price accepted. Nothing is charged yet.',
+    body: 'Service picked, address confirmed, price accepted. Nothing is charged yet.',
   },
   {
     t: '00:12',
