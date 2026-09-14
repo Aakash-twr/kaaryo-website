@@ -14,10 +14,14 @@ import { escapeHtml, notesToHtml, quoteToHtml, quoteToText } from './quote'
  */
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 export const isEmailConfigured = () =>
   Boolean(SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY)
+
+export const isContactEmailConfigured = () =>
+  Boolean(SERVICE_ID && CONTACT_TEMPLATE_ID && PUBLIC_KEY)
 
 export class EmailNotConfiguredError extends Error {
   constructor() {
@@ -106,4 +110,46 @@ export async function sendBookingEmail(params) {
 
   const emailjs = await import('@emailjs/browser')
   return emailjs.send(SERVICE_ID, TEMPLATE_ID, params, { publicKey: PUBLIC_KEY })
+}
+
+/**
+ * Template variables for the contact-form acknowledgement email.
+ * Only sent when the user supplies an email address (not a phone number).
+ * Kept flat and self-describing for the same reason as bookingTemplateParams.
+ */
+export function contactTemplateParams({ name, email, city, topic, message, reference, placedAt = new Date() }) {
+  return {
+    to_name: name,
+    to_email: email,
+    reply_to: SITE.supportEmail,
+    from_name: SITE.name,
+
+    reference,
+    placed_at: new Intl.DateTimeFormat('en-IN', DATE_FORMAT).format(placedAt),
+
+    customer_name: name,
+    customer_email: email,
+    customer_city: city,
+    topic,
+    message: message || '—',
+
+    support_email: SITE.supportEmail,
+    support_phone: SITE.phone,
+    support_phone_tel: SITE.phone.replace(/\s/g, ''),
+  }
+}
+
+/**
+ * Send the contact-form acknowledgement. Uses a separate EmailJS template so
+ * the confirmation copy can be tailored to "we got your message" rather than
+ * "your booking is confirmed".
+ *
+ * If VITE_EMAILJS_CONTACT_TEMPLATE_ID is not set, the error is surfaced to
+ * the caller — same loud-failure policy as sendBookingEmail.
+ */
+export async function sendContactEmail(params) {
+  if (!isContactEmailConfigured()) throw new EmailNotConfiguredError()
+
+  const emailjs = await import('@emailjs/browser')
+  return emailjs.send(SERVICE_ID, CONTACT_TEMPLATE_ID, params, { publicKey: PUBLIC_KEY })
 }

@@ -2,7 +2,14 @@ import { useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 import SuccessState from './SuccessState'
 import { ChevronDownIcon, ArrowRightIcon } from '../icons/UiIcons'
-import { LIVE_CITIES, SOON_CITIES } from '../../data/site'
+import { LIVE_CITIES, SOON_CITIES, SITE } from '../../data/site'
+import {
+  EmailNotConfiguredError,
+  contactTemplateParams,
+  isContactEmailConfigured,
+  sendContactEmail,
+} from '../../lib/email'
+import { makeReference } from '../../lib/quote'
 
 const TOPICS = [
   'A booking I already made',
@@ -16,6 +23,9 @@ const EMPTY = { name: '', contact: '', city: 'Hyderabad', topic: TOPICS[0], mess
 
 const FIELD =
   'w-full rounded-2xl border border-ink-900/12 bg-white px-4 py-3.5 text-[0.95rem] text-ink-900 transition-colors placeholder:text-ink-400 hover:border-ink-900/25'
+
+/** Rough but sufficient: if it contains @ and a dot after @, treat it as an email. */
+const looksLikeEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())
 
 function Label({ htmlFor, children, optional }) {
   return (
@@ -33,25 +43,68 @@ function Label({ htmlFor, children, optional }) {
 export default function ContactForm() {
   const [form, setForm] = useState(EMPTY)
   const [sent, setSent] = useState(false)
+  const [reference, setReference] = useState('')
+  const [status, setStatus] = useState('idle') // idle | sending | error
+  const [failure, setFailure] = useState(null)
 
   const update = (key) => (e) => setForm({ ...form, [key]: e.target.value })
 
-  // Deliberately local: no network request, just the success state.
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const ref = makeReference()
+    setReference(ref)
+    setStatus('sending')
+    setFailure(null)
+
+    // Only attempt an email send when the user gave us an email address.
+    // If they gave a phone number we skip silently and go straight to the
+    // success screen — same UX, no error for a valid contact choice.
+    if (looksLikeEmail(form.contact)) {
+      try {
+        await sendContactEmail(
+          contactTemplateParams({
+            name: form.name,
+            email: form.contact.trim(),
+            city: form.city,
+            topic: form.topic,
+            message: form.message,
+            reference: ref,
+          })
+        )
+      } catch (err) {
+        // EmailJS not configured in dev → warn but still show success so the
+        // rest of the UI can be tested without credentials.
+        if (err instanceof EmailNotConfiguredError && import.meta.env.DEV) {
+          console.warn('[ContactForm] EmailJS contact template not configured — skipping send in dev.')
+        } else if (!(err instanceof EmailNotConfiguredError)) {
+          // Real network / API failure — tell the user.
+          setFailure(
+            'We could not send your confirmation email. Your message still reached us — but check your connection and try again if you want the receipt.'
+          )
+          setStatus('error')
+          return
+        }
+      }
+    }
+
+    setStatus('idle')
     setSent(true)
   }
 
   const reset = () => {
     setForm(EMPTY)
     setSent(false)
+    setReference('')
+    setStatus('idle')
+    setFailure(null)
   }
 
   return (
     <div className="overflow-hidden rounded-4xl border border-ink-900/8 bg-paper-50">
       <AnimatePresence mode="wait">
         {sent ? (
-          <SuccessState key="success" name={form.name} onReset={reset} />
+          <SuccessState key="success" name={form.name} reference={reference} onReset={reset} />
         ) : (
           <m.form
             key="form"
@@ -71,9 +124,9 @@ export default function ContactForm() {
 
             <div className="mt-7 grid gap-5 sm:grid-cols-2">
               <div>
-                <Label htmlFor="name">Your name</Label>
+                <Label htmlFor="cf-name">Your name</Label>
                 <input
-                  id="name"
+                  id="cf-name"
                   type="text"
                   required
                   value={form.name}
@@ -84,9 +137,9 @@ export default function ContactForm() {
               </div>
 
               <div>
-                <Label htmlFor="contact">Email or phone</Label>
+                <Label htmlFor="cf-contact">Email or phone</Label>
                 <input
-                  id="contact"
+                  id="cf-contact"
                   type="text"
                   required
                   value={form.contact}
@@ -97,10 +150,10 @@ export default function ContactForm() {
               </div>
 
               <div>
-                <Label htmlFor="city">Your city</Label>
+                <Label htmlFor="cf-city">Your city</Label>
                 <div className="relative">
                   <select
-                    id="city"
+                    id="cf-city"
                     value={form.city}
                     onChange={update('city')}
                     className={`${FIELD} appearance-none pr-11 font-semibold`}
@@ -129,10 +182,10 @@ export default function ContactForm() {
               </div>
 
               <div>
-                <Label htmlFor="topic">What is this about?</Label>
+                <Label htmlFor="cf-topic">What is this about?</Label>
                 <div className="relative">
                   <select
-                    id="topic"
+                    id="cf-topic"
                     value={form.topic}
                     onChange={update('topic')}
                     className={`${FIELD} appearance-none pr-11 font-semibold`}
@@ -151,11 +204,11 @@ export default function ContactForm() {
               </div>
 
               <div className="sm:col-span-2">
-                <Label htmlFor="message" optional>
+                <Label htmlFor="cf-message" optional>
                   Your message
                 </Label>
                 <textarea
-                  id="message"
+                  id="cf-message"
                   rows={5}
                   value={form.message}
                   onChange={update('message')}
@@ -165,20 +218,62 @@ export default function ContactForm() {
               </div>
             </div>
 
+            {/* Network / API error banner */}
+            {status === 'error' && failure && (
+              <div
+                role="alert"
+                className="mt-5 rounded-2xl border border-danger-500/30 bg-danger-500/8 px-5 py-4"
+              >
+                <p className="text-[0.88rem] font-semibold text-danger-600">{failure}</p>
+                <p className="mt-1 text-[0.82rem] text-ink-600">
+                  You can reach us directly on{' '}
+                  <a
+                    href={`tel:${SITE.phone.replace(/\s/g, '')}`}
+                    className="font-semibold text-ink-900 underline underline-offset-2"
+                  >
+                    {SITE.phone}
+                  </a>
+                  .
+                </p>
+              </div>
+            )}
+
+            {/* Dev-mode warning when the contact template is not wired up */}
+            {import.meta.env.DEV && !isContactEmailConfigured() && (
+              <p className="mt-5 rounded-2xl border border-dashed border-warning-500/50 bg-warning-100/60 px-5 py-3 text-[0.8rem] text-ink-700">
+                <strong>Dev note:</strong> Contact email not configured. Set{' '}
+                <code>VITE_EMAILJS_CONTACT_TEMPLATE_ID</code> in <code>.env.local</code> — see{' '}
+                <code>.env.example</code>.
+              </p>
+            )}
+
             <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-xs text-[0.8rem] leading-relaxed text-ink-500">
-                We reply within a few hours on working days. Urgent booking issues are
-                faster by phone.
+                We reply within a few hours on working days. Urgent booking issues are faster by
+                phone.
               </p>
               <button
                 type="submit"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-brand-500 via-brand-600 to-brand-700 px-7 py-3.5 text-[0.97rem] font-semibold text-white shadow-[0_10px_30px_-8px_rgba(0,103,79,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-10px_rgba(0,103,79,0.7)]"
+                disabled={status === 'sending'}
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-brand-500 via-brand-600 to-brand-700 px-7 py-3.5 text-[0.97rem] font-semibold text-white shadow-[0_10px_30px_-8px_rgba(0,103,79,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-10px_rgba(0,103,79,0.7)] disabled:translate-y-0 disabled:opacity-60"
               >
-                Send message
-                <ArrowRightIcon
-                  size={18}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                />
+                {status === 'sending' ? (
+                  <>
+                    <span
+                      aria-hidden="true"
+                      className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white"
+                    />
+                    Sending…
+                  </>
+                ) : (
+                  <>
+                    Send message
+                    <ArrowRightIcon
+                      size={18}
+                      className="transition-transform duration-300 group-hover:translate-x-1"
+                    />
+                  </>
+                )}
               </button>
             </div>
           </m.form>

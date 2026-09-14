@@ -1,12 +1,11 @@
-import { useState } from 'react'
 import { m } from 'framer-motion'
 
 const EASE = [0.16, 0.84, 0.24, 1]
 
-export default function SuccessState({ name, onReset }) {
+export default function SuccessState({ name, reference, onReset }) {
   const firstName = name.trim().split(/\s+/)[0] || 'there'
-  // Generated once per success screen, so it stays stable across re-renders.
-  const [ticket] = useState(() => String(Math.floor(Math.random() * 9000) + 1000))
+  // Show the same reference that was emailed to the customer.
+  const ticket = reference || String(Math.floor(Math.random() * 9000) + 1000)
 
   return (
     <m.div
@@ -58,8 +57,9 @@ export default function SuccessState({ name, onReset }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.55, ease: EASE }}
       >
-        Our team replies within a few hours on working days — usually much sooner. If
-        it is urgent, call us on{' '}
+        If you provided an email address, a confirmation has been sent to your inbox. Our team
+        replies within a few hours on working days — usually much sooner. If it is urgent, call
+        us on{' '}
         <span className="font-mono font-semibold text-ink-900">+91 98765 43210</span>.
       </m.p>
 
@@ -84,7 +84,7 @@ export default function SuccessState({ name, onReset }) {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.8 }}
       >
-        Ticket #KRY-{ticket}
+        Ticket {reference ? reference : `#KRY-${ticket}`}
       </m.p>
     </m.div>
   )

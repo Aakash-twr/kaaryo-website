@@ -1,4 +1,5 @@
 import PageHero from '../components/ui/PageHero'
+import WorkerAppDownload from '../components/workers/WorkerAppDownload'
 import EarningsCalculator from '../components/workers/EarningsCalculator'
 import WorkerBenefits from '../components/workers/WorkerBenefits'
 import WorkerStories from '../components/workers/WorkerStories'
@@ -57,6 +58,8 @@ export default function ForWorkers() {
           ))}
         </RevealGroup>
       </PageHero>
+
+      <WorkerAppDownload />
 
       <section id="calculator" className="scroll-mt-24 bg-paper-50 pb-20 sm:pb-24">
         <div className="container-k">
