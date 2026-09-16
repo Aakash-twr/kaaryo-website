@@ -15,6 +15,7 @@ import { escapeHtml, notesToHtml, quoteToHtml, quoteToText } from './quote'
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 const CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID
+const PLAN_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_PLAN_TEMPLATE_ID
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 export const isEmailConfigured = () =>
@@ -22,6 +23,9 @@ export const isEmailConfigured = () =>
 
 export const isContactEmailConfigured = () =>
   Boolean(SERVICE_ID && CONTACT_TEMPLATE_ID && PUBLIC_KEY)
+
+export const isPlanEmailConfigured = () =>
+  Boolean(SERVICE_ID && PLAN_TEMPLATE_ID && PUBLIC_KEY)
 
 export class EmailNotConfiguredError extends Error {
   constructor() {
@@ -152,4 +156,46 @@ export async function sendContactEmail(params) {
 
   const emailjs = await import('@emailjs/browser')
   return emailjs.send(SERVICE_ID, CONTACT_TEMPLATE_ID, params, { publicKey: PUBLIC_KEY })
+}
+
+/**
+ * Template variables for a Kaaryo Shine subscription interest notification.
+ * Kept flat and self-describing so the EmailJS dashboard is readable without
+ * opening this file.
+ */
+export function planTemplateParams({ name, mobile, city, plan, cat, reference, placedAt = new Date() }) {
+  return {
+    to_name: name,
+    reply_to: SITE.supportEmail,
+    from_name: SITE.name,
+
+    reference,
+    placed_at: new Intl.DateTimeFormat('en-IN', DATE_FORMAT).format(placedAt),
+
+    customer_name: name,
+    customer_mobile: mobile,
+    customer_city: city,
+
+    plan_name: plan.name,
+    plan_tagline: plan.tagline,
+    plan_price: priceOf(plan.price),
+    plan_saves: priceOf(plan.saves),
+    vehicle_type: cat.name,
+
+    support_email: SITE.supportEmail,
+    support_phone: SITE.phone,
+    support_phone_tel: SITE.phone.replace(/\s/g, ''),
+  }
+}
+
+/**
+ * Sends a subscription interest notification using the plan-specific template.
+ * Uses VITE_EMAILJS_PLAN_TEMPLATE_ID — set this in .env.local alongside the
+ * other EmailJS vars. The same loud-failure policy applies.
+ */
+export async function sendPlanEmail(params) {
+  if (!isPlanEmailConfigured()) throw new EmailNotConfiguredError()
+
+  const emailjs = await import('@emailjs/browser')
+  return emailjs.send(SERVICE_ID, PLAN_TEMPLATE_ID, params, { publicKey: PUBLIC_KEY })
 }

@@ -1,0 +1,270 @@
+<!--
+  Kaaryo — Kaaryo Shine subscription interest acknowledgement
+  Paste this whole file into the EmailJS template editor in Code / HTML mode.
+
+  Template settings (EmailJS dashboard → Email Templates → this template):
+    To Name   : {{to_name}}
+    From Name : {{from_name}}          ← must NOT be blank; see emailjs-template.md
+    Reply To  : {{reply_to}}
+    Subject   : Kaaryo Shine {{plan_name}} plan — we'll call you soon · ref {{reference}}
+    Bcc       : your ops inbox          ← REQUIRED — this is how the team knows to call back
+
+  Variables sent by planTemplateParams() in src/lib/email.js:
+    {{to_name}} / {{customer_name}}   — subscriber's name
+    {{customer_mobile}}               — mobile number to call back on
+    {{customer_city}}                 — city they selected
+    {{plan_name}}                     — Starter / Regular / Unlimited
+    {{plan_tagline}}                  — "8 exterior washes / month"
+    {{plan_price}}                    — ₹599
+    {{plan_saves}}                    — ₹593
+    {{vehicle_type}}                  — Kaaryo Shine (cat.name)
+    {{reference}}                     — e.g. KRY-X7M2A
+    {{placed_at}}                     — date/time (IST, full format)
+    {{support_email}}  {{support_phone}}  {{support_phone_tel}}
+
+  Rules this file follows, and why breaking them breaks the email:
+    · Layout is tables. Outlook renders through Word: no flexbox, no grid.
+    · Styles are inline. Gmail strips <head>, and <style> only survives in
+      some clients — the block below is progressive enhancement, never load-bearing.
+    · Width is 600 px. Anything wider gets pinch-zoomed on a phone.
+    · No SVG, no web fonts, no background images. Gmail and Outlook drop them.
+-->
+<div style="margin:0;padding:0;width:100%;background-color:#eef2f6">
+
+  <!-- Preview line: what shows next to the subject in the inbox list. -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;height:0;width:0">
+    {{plan_name}} plan received &middot; {{plan_price}}/mo &middot; We&rsquo;ll call you within 2 hours
+    &#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;&#8203;
+  </div>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background-color:#eef2f6">
+    <tr>
+      <td align="center" style="padding:32px 12px">
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;border-collapse:collapse">
+
+          <!-- ============================= HEADER ============================= -->
+          <!-- Cyan accent stripe for Shine — differentiates from standard booking emails -->
+          <tr>
+            <td style="padding:0">
+              <div style="height:4px;background-color:#06b6d4;font-size:0;line-height:0;border-radius:16px 16px 0 0">&nbsp;</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#0a3c30;padding:26px 32px">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse">
+                <tr>
+                  <td align="left" style="vertical-align:middle">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse">
+                      <tr>
+                        <td style="padding-right:11px;vertical-align:middle">
+                          <img src="https://kaaryo.vercel.app/icon-192.png" width="34" height="34" alt="Kaaryo" style="display:block;width:34px;height:34px;border:0;border-radius:10px">
+                        </td>
+                        <td style="vertical-align:middle;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:21px;font-weight:800;letter-spacing:-0.6px;color:#f8fafc">
+                          Kaaryo<span style="color:#3ebb9e">.</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td align="right" style="vertical-align:middle">
+                    <!-- Cyan badge — Shine brand colour, not the standard green -->
+                    <span style="display:inline-block;padding:6px 13px;border-radius:100px;background-color:#0891b2;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#ecfeff;white-space:nowrap">
+                      Shine &middot; Plan received
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============================== HERO ============================== -->
+          <tr>
+            <td style="background-color:#ffffff;padding:38px 32px 30px">
+              <h1 style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:30px;line-height:1.2;font-weight:800;letter-spacing:-1px;color:#0f172a">
+                You&rsquo;re on, {{to_name}}.
+              </h1>
+              <p style="margin:14px 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.65;color:#475569">
+                We&rsquo;ve received your interest in the Kaaryo Shine
+                <strong style="color:#0f172a">{{plan_name}} plan</strong>.
+                Our team will call you on
+                <span style="color:#0f172a;font-weight:600;white-space:nowrap">{{customer_mobile}}</span>
+                within <strong style="color:#0f172a">2 hours</strong> to confirm your area coverage
+                and schedule your first wash.
+              </p>
+
+              <!-- Reference -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-top:24px">
+                <tr>
+                  <td style="background-color:#f1f5f9;border:1px solid #e2e8f0;border-radius:12px;padding:12px 18px">
+                    <span style="display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#64748b">
+                      Plan reference
+                    </span>
+                    <span style="display:block;margin-top:4px;font-family:'SFMono-Regular',Menlo,Consolas,monospace;font-size:19px;font-weight:700;letter-spacing:1.5px;color:#0f172a">
+                      {{reference}}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- =========================== PLAN SUMMARY ========================== -->
+          <tr>
+            <td style="background-color:#ffffff;padding:0 32px">
+              <p style="margin:0 0 10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#64748b">
+                Your plan
+              </p>
+
+              <!-- Cyan-tinted plan card -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background-color:#ecfeff;border:1.5px solid #a5f3fc;border-radius:14px">
+                <tr>
+                  <td style="padding:20px 22px">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse">
+                      <tr>
+                        <!-- Left: plan details -->
+                        <td style="vertical-align:top;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+                          <span style="display:block;font-size:18px;font-weight:800;letter-spacing:-0.5px;color:#0f172a">
+                            Kaaryo Shine &mdash; {{plan_name}}
+                          </span>
+                          <span style="display:block;margin-top:4px;font-size:13px;color:#475569">
+                            {{plan_tagline}}
+                          </span>
+                          <span style="display:inline-block;margin-top:10px;padding:5px 12px;border-radius:100px;background-color:#cffafe;font-size:11px;font-weight:700;letter-spacing:0.3px;color:#0e7490">
+                            Saves {{plan_saves}} vs per-wash pricing
+                          </span>
+                        </td>
+                        <!-- Right: price -->
+                        <td align="right" style="vertical-align:top;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;white-space:nowrap">
+                          <span style="display:block;font-size:28px;font-weight:800;letter-spacing:-1px;color:#0891b2">
+                            {{plan_price}}
+                          </span>
+                          <span style="display:block;font-size:12px;color:#64748b">
+                            per month
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Divider -->
+                    <div style="height:1px;background-color:#a5f3fc;margin:16px 0;font-size:0;line-height:0">&nbsp;</div>
+
+                    <!-- Details row -->
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px">
+                      <tr>
+                        <td width="100" style="padding:0 0 8px;color:#64748b">Name</td>
+                        <td style="padding:0 0 8px;color:#0f172a;font-weight:600;text-align:right">{{customer_name}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:0 0 8px;color:#64748b">Mobile</td>
+                        <td style="padding:0 0 8px;color:#0f172a;font-weight:600;text-align:right">{{customer_mobile}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:0;color:#64748b">City</td>
+                        <td style="padding:0;color:#0f172a;font-weight:600;text-align:right">{{customer_city}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- =========================== WHAT'S NEXT ========================== -->
+          <tr>
+            <td style="background-color:#ffffff;padding:34px 32px 0">
+              <h2 style="margin:0 0 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:19px;font-weight:800;letter-spacing:-0.4px;color:#0f172a">
+                What happens next
+              </h2>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse">
+                <tr>
+                  <td width="34" style="padding:0 0 16px;vertical-align:top">
+                    <div style="width:26px;height:26px;border-radius:13px;background-color:#0891b2;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;line-height:26px;color:#ffffff">1</div>
+                  </td>
+                  <td style="padding:0 0 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+                    <span style="display:block;font-size:14px;font-weight:700;color:#0f172a">We call you within 2 hours</span>
+                    <span style="display:block;margin-top:2px;font-size:13px;line-height:1.6;color:#64748b">Our team calls on {{customer_mobile}} to confirm your area is covered and talk through the schedule.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="34" style="padding:0 0 16px;vertical-align:top">
+                    <div style="width:26px;height:26px;border-radius:13px;background-color:#0891b2;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;line-height:26px;color:#ffffff">2</div>
+                  </td>
+                  <td style="padding:0 0 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+                    <span style="display:block;font-size:14px;font-weight:700;color:#0f172a">Your Bolt is assigned</span>
+                    <span style="display:block;margin-top:2px;font-size:13px;line-height:1.6;color:#64748b">A verified washer in your area is matched to your subscription. You get their name and rating before the first wash.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="34" style="padding:0;vertical-align:top">
+                    <div style="width:26px;height:26px;border-radius:13px;background-color:#0891b2;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;font-weight:700;line-height:26px;color:#ffffff">3</div>
+                  </td>
+                  <td style="padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+                    <span style="display:block;font-size:14px;font-weight:700;color:#0f172a">First wash, then monthly billing</span>
+                    <span style="display:block;margin-top:2px;font-size:13px;line-height:1.6;color:#64748b">No payment is collected until your subscription is active. Cancel anytime from the app &mdash; no penalty, no questions.</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ========================= NO PAYMENT NOTE ========================= -->
+          <tr>
+            <td style="background-color:#ffffff;padding:22px 32px 0">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background-color:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 10px 10px 0">
+                <tr>
+                  <td style="padding:14px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#166534">
+                    <strong>No payment is taken today.</strong> Your subscription is only activated after our team confirms coverage with you on the phone.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============================== HELP ============================== -->
+          <tr>
+            <td style="background-color:#ffffff;padding:28px 32px 38px">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background-color:#0a3c30;border-radius:14px">
+                <tr>
+                  <td style="padding:24px 26px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+                    <span style="display:block;font-size:16px;font-weight:700;color:#f8fafc">Can&rsquo;t wait? Call us.</span>
+                    <span style="display:block;margin-top:5px;font-size:13px;line-height:1.6;color:#9fb8b0">
+                      If you need to reach us before we call you &mdash; real people, 24&times;7, in five languages.
+                    </span>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-top:18px">
+                      <tr>
+                        <td style="background-color:#06b6d4;border-radius:100px">
+                          <a href="tel:{{support_phone_tel}}" style="display:inline-block;padding:12px 26px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;color:#083344;text-decoration:none;white-space:nowrap">
+                            Call {{support_phone}}
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ============================= FOOTER ============================= -->
+          <tr>
+            <td style="background-color:#ffffff;border-radius:0 0 16px 16px;padding:0">
+              <div style="height:16px;font-size:0;line-height:0">&nbsp;</div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:24px 24px 8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.7;color:#8496a8">
+              <a href="mailto:{{support_email}}" style="color:#00674f;text-decoration:none;font-weight:600">{{support_email}}</a>
+              &nbsp;&middot;&nbsp;
+              <a href="https://kaaryo.vercel.app" style="color:#00674f;text-decoration:none;font-weight:600">kaaryo.vercel.app</a>
+              <br>
+              Kaaryo Technologies Pvt Ltd &middot; Banjara Hills, Hyderabad
+              <br>
+              <span style="color:#a8b6c4">You&rsquo;re getting this because you requested a Kaaryo Shine subscription plan.</span>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

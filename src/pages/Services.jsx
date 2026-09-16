@@ -46,12 +46,12 @@ export default function Services() {
             <br className="hidden sm:block" /> Honest durations.
           </>
         }
-        body={`${TOTAL_SERVICES} services across six trades. Fixed rates on the predictable jobs, a clear starting price on the ones that need a look first. Choose a category to see everything it covers.`}
+        body={`${TOTAL_SERVICES} services across ${CATEGORIES.length} trades — including the new Kaaryo Shine vehicle washing category. Fixed rates on the predictable jobs, a clear starting price on the ones that need a look first. Choose a category to see everything it covers.`}
       >
         <div className="mt-9 flex flex-wrap gap-3">
           {[
             { value: TOTAL_SERVICES, suffix: '', label: 'services live' },
-            { value: 6, suffix: '', label: 'trades covered' },
+            { value: CATEGORIES.length, suffix: '', label: 'trades covered' },
             { value: cheapest, prefix: '₹', label: 'lowest price' },
           ].map((s) => (
             <div

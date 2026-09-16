@@ -26,6 +26,11 @@ export default function ServiceRow({ item, cat, index }) {
 
         <div className="min-w-0 flex-1">
           <p className="text-[0.98rem] leading-tight font-bold text-ink-900">{item.name}</p>
+          {item.desc && (
+            <p className="mt-1 text-[0.78rem] leading-snug text-ink-500 line-clamp-2">
+              {item.desc}
+            </p>
+          )}
           <p className="mt-1.5 inline-flex items-center gap-1.5 font-mono text-[0.68rem] tracking-[0.06em] text-ink-500">
             <ClockIcon size={12} className="text-ink-400" />
             {durationLabel(item)}

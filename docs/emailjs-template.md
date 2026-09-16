@@ -12,7 +12,7 @@ The template itself lives in
 1. **Email Services → Add New Service.** Connect the mailbox confirmations
    should come *from* (Gmail, Outlook, or SMTP). Copy the **Service ID**.
 2. **Email Templates → Create New Template.** Copy the **Template ID**.
-3. **Account → General.** Copy the **Public Key**.
+3. **Account → General.** Copy the **Public Key**.\
 4. Put all three in `.env.local` (see `.env.example`) and restart the dev
    server — Vite only reads env files at startup.
 
@@ -122,3 +122,55 @@ rather than branched in the template.
 The money in those variables comes from `src/lib/quote.js`, which also renders
 the on-screen breakdown — so the email and the screen cannot quote different
 totals.
+
+---
+
+# Kaaryo Shine plan interest email — EmailJS setup
+
+Sent when a user submits the **"Request this plan"** form on the subscription
+plan modal. It goes to the customer (acknowledging their interest) and, via
+**Bcc**, to your ops inbox (triggering the callback).
+
+The template lives in [`emailjs-plan-template.html`](emailjs-plan-template.html).
+
+## Template settings
+
+| Field | Value |
+| --- | --- |
+| To Name | `{{to_name}}` |
+| From Name | `{{from_name}}` — **required** |
+| Reply To | `{{reply_to}}` |
+| Subject | `Kaaryo Shine {{plan_name}} plan — we'll call you soon · ref {{reference}}` |
+| **Bcc** | your ops inbox — **this is how the team knows to make the callback** |
+
+> **Note:** There is no `to_email` for plan sign-ups (the form only collects
+> mobile and name). The email is sent to the customer's mobile carrier inbox
+> only if you add a `to_email` field later. For now the Bcc is the only copy
+> the team sees — set it.
+
+## Environment variable
+
+Add to `.env.local` (and Vercel environment variables):
+
+```
+VITE_EMAILJS_PLAN_TEMPLATE_ID=template_xxxxxxx
+```
+
+The Service ID and Public Key are shared with the booking template.
+
+## Available variables
+
+| Variable | Example |
+| --- | --- |
+| `to_name` / `customer_name` | `Priya Sharma` |
+| `customer_mobile` | `+91 98765 43210` |
+| `customer_city` | `Hyderabad` |
+| `plan_name` | `Regular` |
+| `plan_tagline` | `8 exterior washes / month` |
+| `plan_price` | `₹599` |
+| `plan_saves` | `₹593` |
+| `vehicle_type` | `Kaaryo Shine` |
+| `reference` | `KRY-X7M2A` |
+| `placed_at` | `Tuesday, 16 September 2026 at 2:18 pm` (IST) |
+| `support_email`, `support_phone`, `support_phone_tel` | from `src/data/site.js` |
+

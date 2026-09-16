@@ -65,6 +65,23 @@ export function PaintingIcon(props) {
   )
 }
 
+export function VehicleWashIcon(props) {
+  return (
+    <Icon {...props}>
+      {/* Car body */}
+      <path d="M3.4 14.6h17.2v3a1 1 0 0 1-1 1H4.4a1 1 0 0 1-1-1v-3Z" />
+      <path d="M5.4 14.6l2.2-4.4a2 2 0 0 1 1.8-1.1h5.2a2 2 0 0 1 1.8 1.1l2.2 4.4" />
+      {/* Wheels */}
+      <circle cx="7.4" cy="17.6" r="1.4" fill="none" />
+      <circle cx="16.6" cy="17.6" r="1.4" fill="none" />
+      {/* Water droplets */}
+      <path d="M11 3c0 0 1.2 1.6 1.2 2.4a1.2 1.2 0 0 1-2.4 0C9.8 4.6 11 3 11 3Z" />
+      <path d="M15.4 4.2c0 0 .9 1.2.9 1.8a.9.9 0 0 1-1.8 0c0-.6.9-1.8.9-1.8Z" />
+      <path d="M6.6 4.2c0 0 .9 1.2.9 1.8a.9.9 0 0 1-1.8 0c0-.6.9-1.8.9-1.8Z" />
+    </Icon>
+  )
+}
+
 /** Category slug → icon component. */
 export const SERVICE_ICONS = {
   electrician: ElectricianIcon,
@@ -73,4 +90,5 @@ export const SERVICE_ICONS = {
   plumbing: PlumbingIcon,
   carpentry: CarpentryIcon,
   painting: PaintingIcon,
+  'vehicle-wash': VehicleWashIcon,
 }

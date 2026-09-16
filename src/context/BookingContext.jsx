@@ -12,6 +12,12 @@ import { AnimatePresence } from 'framer-motion'
  */
 const BookingModal = lazy(() => import('../components/booking/BookingModal'))
 
+/**
+ * Subscription plan sign-up modal — also lazy. Collects name, mobile and city
+ * only; the team calls back to confirm coverage and schedule the first wash.
+ */
+const PlanModal = lazy(() => import('../components/booking/PlanModal'))
+
 const BookingContext = createContext(null)
 
 export function useBooking() {
@@ -22,13 +28,17 @@ export function useBooking() {
 
 export default function BookingProvider({ children }) {
   const [selection, setSelection] = useState(null)
+  const [planSelection, setPlanSelection] = useState(null)
 
   const openBooking = useCallback((item, cat) => setSelection({ item, cat }), [])
   const closeBooking = useCallback(() => setSelection(null), [])
 
+  const openPlan = useCallback((plan, cat) => setPlanSelection({ plan, cat }), [])
+  const closePlan = useCallback(() => setPlanSelection(null), [])
+
   const value = useMemo(
-    () => ({ openBooking, closeBooking, selection }),
-    [openBooking, closeBooking, selection]
+    () => ({ openBooking, closeBooking, selection, openPlan, closePlan, planSelection }),
+    [openBooking, closeBooking, selection, openPlan, closePlan, planSelection]
   )
 
   return (
@@ -45,6 +55,14 @@ export default function BookingProvider({ children }) {
               item={selection.item}
               cat={selection.cat}
               onClose={closeBooking}
+            />
+          )}
+          {planSelection && (
+            <PlanModal
+              key="plan"
+              plan={planSelection.plan}
+              cat={planSelection.cat}
+              onClose={closePlan}
             />
           )}
         </AnimatePresence>

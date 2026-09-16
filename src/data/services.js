@@ -114,6 +114,139 @@ export const CATEGORIES = [
       { name: 'Wall Painting', price: 1999, mins: 180, from: true },
     ],
   },
+  {
+    slug: 'vehicle-wash',
+    name: 'Kaaryo Shine',
+    blurb:
+      'Doorstep wash and detailing for cars, bikes and scooters — no garage, no hose, no waiting.',
+    accent: '#06B6D4',
+    note: 'Doorstep · no hose needed',
+    /** What to call the person who turns up, in a sentence. */
+    pro: 'Bolt',
+    materials:
+      'All cleaning supplies, foam, microfibre cloths and water are carried by your Bolt. Nothing to arrange on your end.',
+    /**
+     * Sub-groups rendered as a Car / Bike toggle inside the price-list panel.
+     * Each item carries a `group` field matching one of these ids.
+     */
+    defaultGroup: 'bike',
+    groups: [
+      { id: 'bike', label: 'Bike / Scooter' },
+      { id: 'car', label: 'Car' },
+    ],
+    items: [
+      // Car services
+      {
+        name: 'Basic Exterior Wash', price: 149, mins: 25, group: 'car',
+        desc: 'Water rinse, foam wash, hand scrub of exterior body, wheel clean and microfibre dry.',
+      },
+      {
+        name: 'Interior Vacuuming', price: 149, mins: 30, group: 'car',
+        desc: 'Seats, floor mats, dashboard, boot space and between seat gaps vacuumed.',
+      },
+      {
+        name: 'Full Wash (Exterior + Interior)', price: 249, mins: 45, group: 'car',
+        desc: 'Everything in Basic Exterior Wash plus interior vacuum, dashboard wipe and inside glass clean.',
+      },
+      {
+        name: 'Foam Wash (Low Water)', price: 199, mins: 30, group: 'car',
+        desc: 'High-foam spray agitated with a soft mitt and wiped off — uses 80% less water. Ideal for societies with hose restrictions.',
+      },
+      {
+        name: 'Premium Wash', price: 399, mins: 60, group: 'car',
+        desc: 'Full Wash plus tyre shine, engine bay dry wipe, interior fragrance, seat wipe and full glass treatment inside and out.',
+      },
+      {
+        name: 'Windshield & Glass Treatment', price: 299, mins: 30, group: 'car',
+        desc: 'Rain-repellent coating applied to all glass surfaces for significantly better wet-weather visibility.',
+      },
+      {
+        name: 'AC Vent & Dashboard Detailing', price: 249, mins: 35, group: 'car',
+        desc: 'AC vents cleaned with brushes and compressed air, dashboard vinyl conditioned and console detailed.',
+      },
+      {
+        name: 'Deep Interior Cleaning', price: 799, mins: 150, from: true, group: 'car',
+        desc: 'Seat and carpet shampooing, full dashboard and door panel deep clean, roof lining wipe and boot clean. Takes 2–3 hrs.',
+      },
+      {
+        name: 'Full Car Detailing', price: 1999, mins: 300, from: true, group: 'car',
+        desc: 'Paint decontamination, clay bar, single-stage machine polish, full interior deep clean, tyre dressing and glass coat. 4–6 hrs.',
+      },
+      {
+        name: 'Ceramic Coating (Single Layer)', price: 3999, mins: 360, from: true, group: 'car',
+        desc: 'Surface prep, single-layer ceramic coat application and curing. Protects paint for 6–12 months.',
+      },
+      // Bike / Scooter services
+      {
+        name: 'Basic Bike Wash', price: 79, mins: 20, group: 'bike',
+        desc: 'Water rinse, foam wash, body panel scrub, wheel clean and chain wipe.',
+      },
+      {
+        name: 'Full Bike Wash', price: 129, mins: 35, group: 'bike',
+        desc: 'Basic wash plus under-body clean, engine surface dry wipe, spoke clean and headlight and tail light clean.',
+      },
+      {
+        name: 'Scooter Interior Cleaning', price: 149, mins: 30, group: 'bike',
+        desc: 'Under-seat compartment, footboard scrub, handlebar grip clean and speedometer glass clean. For scooters only.',
+      },
+      {
+        name: 'Premium Bike Wash', price: 199, mins: 45, group: 'bike',
+        desc: 'Full Bike Wash plus tyre shine, body polish wipe, chain lubrication and seat conditioning.',
+      },
+      {
+        name: 'Bike Detailing', price: 499, mins: 105, from: true, group: 'bike',
+        desc: 'Full wash, chrome polish, tank pad clean, compound and full body polish, tyre shine, chain clean and lube. 1.5–2 hrs.',
+      },
+    ],
+    /** Subscription plans — vehicleType matches the group toggle. */
+    subscriptions: [
+      {
+        id: 'car-4',
+        vehicleType: 'car',
+        name: 'Starter',
+        tagline: '4 exterior washes / month',
+        price: 349,
+        saves: 247,
+        highlight: false,
+      },
+      {
+        id: 'car-8',
+        vehicleType: 'car',
+        name: 'Regular',
+        tagline: '8 exterior washes / month',
+        price: 599,
+        saves: 593,
+        highlight: true,
+      },
+      {
+        id: 'car-12',
+        vehicleType: 'car',
+        name: 'Premium',
+        tagline: '12 exterior washes / month',
+        price: 799,
+        saves: 989,
+        highlight: false,
+      },
+      {
+        id: 'bike-4',
+        vehicleType: 'bike',
+        name: 'Starter',
+        tagline: '4 washes / month',
+        price: 199,
+        saves: 117,
+        highlight: false,
+      },
+      {
+        id: 'bike-8',
+        vehicleType: 'bike',
+        name: 'Regular',
+        tagline: '8 washes / month',
+        price: 349,
+        saves: 283,
+        highlight: true,
+      },
+    ],
+  },
 ]
 
 export const PLATFORM_FEE = 0
