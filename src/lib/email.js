@@ -97,6 +97,12 @@ export function bookingTemplateParams({ booking, quote, reference, placedAt = ne
       .filter(Boolean)
       .map(escapeHtml)
       .join('<br>'),
+    customer_location: booking.location
+      ? `${booking.location.lat.toFixed(6)}, ${booking.location.lng.toFixed(6)}`
+      : '—',
+    customer_location_link: booking.location
+      ? `https://www.google.com/maps?q=${booking.location.lat},${booking.location.lng}`
+      : '',
 
     support_email: SITE.supportEmail,
     support_phone: SITE.phone,

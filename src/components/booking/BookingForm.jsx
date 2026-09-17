@@ -1,14 +1,16 @@
-import { useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { LIVE_CITIES } from '../../data/site'
 import { validateBooking } from './validation'
 import { ChevronDownIcon } from '../icons/UiIcons'
 
-const FIELD =
-  'w-full rounded-2xl border bg-white px-4 py-3 text-[0.94rem] text-ink-900 transition-colors placeholder:text-ink-400'
-const OK = 'border-ink-900/12 hover:border-ink-900/25'
-const BAD = 'border-danger-500/60 hover:border-danger-500'
+const LocationPicker = lazy(() => import('./LocationPicker'))
 
-function Field({ id, label, hint, error, optional, children }) {
+export const FIELD =
+  'w-full rounded-2xl border bg-white px-4 py-3 text-[0.94rem] text-ink-900 transition-colors placeholder:text-ink-400'
+export const OK = 'border-ink-900/12 hover:border-ink-900/25'
+export const BAD = 'border-danger-500/60 hover:border-danger-500'
+
+export function Field({ id, label, hint, error, optional, children }) {
   return (
     <div>
       <label htmlFor={id} className="mb-1.5 flex items-baseline gap-2">
@@ -35,6 +37,10 @@ function Field({ id, label, hint, error, optional, children }) {
  * Name, mobile and address are what the professional needs to reach you.
  * Email is here because the confirmation has to land somewhere — without it
  * there is nothing to send.
+ *
+ * Flow: the map picker appears right after the city dropdown. Once the
+ * customer pins a valid (in-area) location, the full-address and landmark
+ * fields slide in so they can add flat / building / street detail.
  */
 export default function BookingForm({ form, onChange, errors, onValidityChange, submitted }) {
   const [touched, setTouched] = useState({})
@@ -63,6 +69,15 @@ export default function BookingForm({ form, onChange, errors, onValidityChange, 
     'aria-describedby': shown(key) ? `${key}-error` : undefined,
     className: `${FIELD} ${shown(key) ? BAD : OK}`,
   })
+
+  const handleLocationChange = (coords) => {
+    const next = { ...form, location: coords }
+    onChange(next)
+    onValidityChange?.(validateBooking(next))
+  }
+
+  // Address fields unlock only when the pin is placed inside a service area
+  const pinIsValid = form.location && !form.location.outOfArea
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
@@ -113,32 +128,45 @@ export default function BookingForm({ form, onChange, errors, onValidityChange, 
         </div>
       </Field>
 
+      {/* Step 1: Pin your location on the map */}
       <div className="sm:col-span-2">
-        <Field
-          id="address"
-          label="Full address"
-          hint="Flat or house number, building, street and area."
-          error={shown('address')}
+        <Suspense
+          fallback={
+            <div className="location-picker" style={{ padding: '2rem', textAlign: 'center' }}>
+              <span className="location-picker__spinner" aria-hidden="true" />
+              <span style={{ marginLeft: '0.5rem', fontSize: '0.82rem', color: 'var(--color-ink-500)' }}>
+                Loading map…
+              </span>
+            </div>
+          }
         >
-          <textarea
-            rows={3}
-            autoComplete="street-address"
-            placeholder="Flat 402, Sai Residency, Road No. 12, Banjara Hills"
-            {...inputProps('address')}
-            className={`${FIELD} ${shown('address') ? BAD : OK} resize-y`}
+          <LocationPicker
+            city={form.city}
+            onLocationChange={handleLocationChange}
+            initialCoords={form.location}
           />
-        </Field>
+        </Suspense>
       </div>
 
-      <div className="sm:col-span-2">
-        <Field id="landmark" label="Landmark" optional>
-          <input
-            type="text"
-            placeholder="Opposite the Reliance Fresh"
-            {...inputProps('landmark')}
-          />
-        </Field>
-      </div>
+      {/* Step 2: Address field — revealed only after a valid pin is placed */}
+      {pinIsValid && (
+        <div className="sm:col-span-2 booking-fields-reveal">
+          <Field
+            id="address"
+            label="Full address"
+            hint="Flat or house number, building, street and area."
+            error={shown('address')}
+          >
+            <textarea
+              rows={3}
+              autoComplete="street-address"
+              placeholder="Flat 402, Sai Residency, Road No. 12, Banjara Hills"
+              {...inputProps('address')}
+              className={`${FIELD} ${shown('address') ? BAD : OK} resize-y`}
+            />
+          </Field>
+        </div>
+      )}
     </div>
   )
 }

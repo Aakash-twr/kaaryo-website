@@ -7,6 +7,7 @@ export const EMPTY_BOOKING = {
   address: '',
   landmark: '',
   city: LIVE_CITIES[0].name,
+  location: null, // { lat, lng } from the map pin
 }
 
 /** Digits only, so "+91 98765 43210" and "9876543210" validate the same. */
@@ -38,6 +39,10 @@ export function validateBooking(form) {
     errors.address = 'Add the flat or house number, building and street.'
   }
 
+  if (form.location?.outOfArea) {
+    errors.location = 'We don\u2019t serve this area yet. Pin a location in Hyderabad, Delhi or Bengaluru.'
+  }
+
   return errors
 }
 
@@ -50,5 +55,6 @@ export function cleanBooking(form) {
     address: form.address.trim(),
     landmark: form.landmark.trim(),
     city: form.city,
+    location: form.location || null,
   }
 }

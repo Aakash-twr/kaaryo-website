@@ -199,6 +199,11 @@
     background-position: -60% 50%;
   }
 }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ------------------------------------------------------------------ */
 
@@ -389,6 +394,272 @@
   .slider-k:focus-visible::-webkit-slider-thumb {
     outline: 3px solid var(--color-brand-400);
     outline-offset: 3px;
+  }
+
+  /* ---- Location Picker (Leaflet map in booking modal) ---- */
+  .location-picker {
+    border-radius: 1rem;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: var(--color-paper-100);
+    overflow: hidden;
+    isolation: isolate;
+    contain: paint;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    transition: box-shadow 0.3s ease;
+  }
+  .location-picker:hover {
+    box-shadow: 0 8px 30px -10px rgba(0, 103, 79, 0.12);
+  }
+
+  .location-picker__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.7rem 0.85rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.98), rgba(241, 245, 249, 0.98));
+    border-top-left-radius: calc(1rem - 1px);
+    border-top-right-radius: calc(1rem - 1px);
+    overflow: hidden;
+  }
+
+  .location-picker__title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-ink-800);
+    letter-spacing: 0.01em;
+  }
+  .location-picker__title svg {
+    color: var(--color-brand-500);
+    flex-shrink: 0;
+  }
+
+  .location-picker__gps-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: white;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-brand-600);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .location-picker__gps-btn:hover:not(:disabled) {
+    background: var(--color-brand-50);
+    border-color: var(--color-brand-400);
+    box-shadow: 0 2px 8px -2px rgba(0, 103, 79, 0.25);
+    transform: translateY(-1px);
+  }
+  .location-picker__gps-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .location-picker__map-wrap {
+    position: relative;
+    height: 200px;
+    background: var(--color-paper-200);
+  }
+  @media (min-width: 640px) {
+    .location-picker__map-wrap {
+      height: 240px;
+    }
+  }
+
+  .location-picker__map {
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+  }
+
+  .location-picker__loading {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--color-ink-500);
+    font-size: 0.82rem;
+  }
+
+  .location-picker__spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--color-brand-200);
+    border-top-color: var(--color-brand-500);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  .location-picker__spinner--lg {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 2.5px;
+  }
+
+  .location-picker__zone-badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e2f9f1;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .location-picker__zone-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #00d69f;
+    box-shadow: 0 0 8px #00d69f;
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .location-picker__hint {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: float-hint 2.5s ease-in-out infinite;
+  }
+
+  @keyframes float-hint {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-3px); }
+  }
+
+  .location-picker__label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.85rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.06);
+    background: linear-gradient(135deg, var(--color-brand-50), rgba(226, 249, 241, 0.4));
+    border-bottom-left-radius: calc(1rem - 1px);
+    border-bottom-right-radius: calc(1rem - 1px);
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--color-ink-700);
+    line-height: 1.4;
+  }
+  .location-picker__label svg {
+    color: var(--color-brand-500);
+    flex-shrink: 0;
+  }
+
+  /* Override Leaflet's default tile-layer z-index to keep
+     it below the booking modal's close button. */
+  .location-picker .leaflet-pane { z-index: 1; }
+  .location-picker .leaflet-top,
+  .location-picker .leaflet-bottom { z-index: 2; }
+  .location-picker .leaflet-control-attribution { display: none !important; }
+
+  /* ---- Out-of-area error state ---- */
+  .location-picker--error {
+    border-color: var(--color-danger-400);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+  }
+
+  .location-picker__out-of-area {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.7rem 0.85rem;
+    border-top: 1px solid rgba(239, 68, 68, 0.15);
+    background: linear-gradient(135deg, rgba(254, 226, 226, 0.6), rgba(254, 202, 202, 0.35));
+    border-bottom-left-radius: calc(1rem - 1px);
+    border-bottom-right-radius: calc(1rem - 1px);
+    animation: slide-in-area 0.3s ease-out;
+  }
+  .location-picker__out-of-area svg {
+    color: var(--color-danger-500);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .location-picker__out-of-area-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-danger-600);
+    margin: 0;
+  }
+  .location-picker__out-of-area-body {
+    font-size: 0.74rem;
+    color: var(--color-ink-700);
+    margin: 0.15rem 0 0;
+    line-height: 1.45;
+  }
+  .location-picker__out-of-area-body strong {
+    color: var(--color-ink-900);
+    font-weight: 600;
+  }
+
+  @keyframes slide-in-area {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ---- Address fields reveal animation ---- */
+  .booking-fields-reveal {
+    animation: fields-reveal 0.4s ease-out;
+  }
+  @keyframes fields-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 

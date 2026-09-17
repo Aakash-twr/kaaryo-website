@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import PriceBreakdown from './PriceBreakdown'
-import BookingForm from './BookingForm'
+import BookingForm, { Field, FIELD, OK } from './BookingForm'
 import BookingConfirmed from './BookingConfirmed'
 import { EMPTY_BOOKING, cleanBooking, validateBooking } from './validation'
 import { buildQuote, makeReference, minimumHours } from '../../lib/quote'
@@ -36,6 +36,7 @@ export default function BookingModal({ item, cat, onClose }) {
   const titleId = 'booking-modal-title'
 
   const quote = useMemo(() => buildQuote({ item, cat, hours }), [item, cat, hours])
+  const pinIsValid = Boolean(form.location && !form.location.outOfArea)
 
   // Escape closes, background stops scrolling — same contract as the mobile
   // menu. Blocked mid-send so a stray key cannot orphan a request.
@@ -205,8 +206,25 @@ export default function BookingModal({ item, cat, onClose }) {
                     </p>
                   </div>
 
-                  <div className="lg:sticky lg:top-6 lg:h-fit">
+                  <div className="space-y-5 lg:sticky lg:top-6 lg:h-fit">
                     <PriceBreakdown quote={quote} hours={hours} onHoursChange={setHours} />
+
+                    {pinIsValid && (
+                      <div className="booking-fields-reveal">
+                        <Field id="landmark" label="Landmark" optional>
+                          <input
+                            id="landmark"
+                            type="text"
+                            placeholder="Opposite the Reliance Fresh"
+                            value={form.landmark ?? ''}
+                            onChange={(e) =>
+                              setForm((prev) => ({ ...prev, landmark: e.target.value }))
+                            }
+                            className={`${FIELD} ${OK}`}
+                          />
+                        </Field>
+                      </div>
+                    )}
                   </div>
                 </div>
 

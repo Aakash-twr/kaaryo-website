@@ -29,11 +29,17 @@ export default function ServicesSection() {
         </div>
 
         <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {CATEGORIES.map((cat) => (
-            <RevealItem key={cat.slug}>
-              <CategoryCard cat={cat} />
-            </RevealItem>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const isFeatured = cat.slug === 'vehicle-wash'
+            return (
+              <RevealItem
+                key={cat.slug}
+                className={isFeatured ? 'sm:col-span-2 lg:col-span-3' : ''}
+              >
+                <CategoryCard cat={cat} wide={isFeatured} />
+              </RevealItem>
+            )
+          })}
         </RevealGroup>
       </div>
     </section>
