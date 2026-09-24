@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import EarningsResult from './EarningsResult'
-import { CATEGORY_RATES, estimate, inr } from './earningsModel'
+import { CATEGORY_RATES, estimate, inr, WORKER_SHARE } from './earningsModel'
 import { ChevronDownIcon } from '../icons/UiIcons'
 import { SERVICE_ICONS } from '../icons/ServiceIcons'
 
@@ -135,7 +135,7 @@ export default function EarningsCalculator() {
         </div>
 
         <p className="mt-6 text-[0.82rem] leading-relaxed text-ink-500">
-          Payouts land every Monday. You keep {Math.round(0.72 * 100)}% of every job
+          Payouts land every Monday. You keep {Math.round(WORKER_SHARE * 100)}% of every job
           value, and Kaaryo covers the cancellation losses that used to come out of
           your pocket.
         </p>

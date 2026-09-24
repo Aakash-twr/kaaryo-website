@@ -30,7 +30,7 @@ export default function ForWorkers() {
             <span className="text-gradient-brand">earning today</span>.
           </>
         }
-        body="Thousands of jobs available in your city. Set your own hours. Get paid weekly. Work near your home — and keep 72% of every job you complete."
+        body="Thousands of jobs available in your city. Set your own hours. Get paid weekly. Work near your home — and keep 90% of every job you complete."
       >
         <div className="mt-9 flex flex-wrap items-center gap-3">
           <Button to="/contact" size="lg">

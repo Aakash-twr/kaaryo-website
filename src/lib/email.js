@@ -108,6 +108,27 @@ export function bookingTemplateParams({ booking, quote, reference, placedAt = ne
     support_phone: SITE.phone,
     // Spaces break a tel: href in several clients.
     support_phone_tel: SITE.phone.replace(/\s/g, ''),
+
+    schedule_type: booking.scheduleType === 'scheduled' ? 'Scheduled' : 'Instant',
+    scheduled_at: booking.scheduledAt
+      ? new Intl.DateTimeFormat('en-IN', DATE_FORMAT).format(new Date(booking.scheduledAt))
+      : 'As soon as possible',
+
+    /*
+     * Pre-built copy strings — use these directly in the EmailJS template so
+     * the template never needs {{#if}} logic. The code decides what to say;
+     * the template just renders it.
+     *
+     * schedule_label  → one-liner shown near the booking reference row
+     * dispatch_note   → paragraph explaining when/how a professional is assigned
+     */
+    schedule_label: booking.scheduleType === 'scheduled' && booking.scheduledAt
+      ? `Scheduled · ${new Intl.DateTimeFormat('en-IN', DATE_FORMAT).format(new Date(booking.scheduledAt))}`
+      : 'Instant booking',
+
+    dispatch_note: booking.scheduleType === 'scheduled' && booking.scheduledAt
+      ? `Your service is scheduled for ${new Intl.DateTimeFormat('en-IN', DATE_FORMAT).format(new Date(booking.scheduledAt))}. We will confirm a verified ${quote.cat.pro} ahead of your slot and call you on ${booking.mobile} to confirm.`
+      : `We are matching you with a verified ${quote.cat.pro} right now — expect a call on ${booking.mobile} within a few minutes.`,
   }
 }
 

@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { inr } from './earningsModel'
+import { inr, WORKER_SHARE } from './earningsModel'
 import { TrophyIcon, WalletIcon, ClockIcon, RupeeIcon } from '../icons/FeatureIcons'
 
 function Row({ icon: RowIcon, label, value }) {
@@ -90,7 +90,7 @@ export default function EarningsResult({ result }) {
       </div>
 
       <p className="relative mt-5 text-[0.74rem] leading-relaxed text-ink-500">
-        Estimates based on live Kaaryo pricing, a {Math.round(0.72 * 100)}% worker
+        Estimates based on live Kaaryo pricing, a {Math.round(WORKER_SHARE * 100)}% worker
         share and the average share of online hours that convert to paid jobs. Actual
         earnings vary by city, rating and demand.
       </p>

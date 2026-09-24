@@ -1,7 +1,7 @@
 import { m } from 'framer-motion'
 import { priceOf } from '../../data/services'
 import { SITE } from '../../data/site'
-import { MailIcon, MapPinIcon, PhoneIcon } from '../icons/FeatureIcons'
+import { MailIcon, MapPinIcon, PhoneIcon, CalendarIcon } from '../icons/FeatureIcons'
 
 const EASE = [0.16, 0.84, 0.24, 1]
 
@@ -53,9 +53,10 @@ export default function BookingConfirmed({ quote, booking, reference, onClose })
         {...rise(0.55)}
       >
         A confirmation with your full price breakdown is on its way to{' '}
-        <span className="font-semibold text-ink-900">{booking.email}</span>. We are
-        matching you with a verified {quote.cat.name.toLowerCase()} now — expect a call
-        on {booking.mobile} within a few minutes.
+        <span className="font-semibold text-ink-900">{booking.email}</span>.{' '}
+        {booking.scheduleType === 'scheduled' && booking.scheduledAt
+          ? `We will confirm a verified ${quote.cat.name.toLowerCase()} ahead of your scheduled time and call on ${booking.mobile}.`
+          : `We are matching you with a verified ${quote.cat.name.toLowerCase()} now — expect a call on ${booking.mobile} within a few minutes.`}
       </m.p>
 
       <m.dl
@@ -80,6 +81,21 @@ export default function BookingConfirmed({ quote, booking, reference, onClose })
             {quote.totalLabel}
           </dd>
         </div>
+        {booking.scheduleType === 'scheduled' && booking.scheduledAt && (
+          <div className="flex items-center justify-between gap-4 px-5 py-3.5">
+            <dt className="flex items-center gap-1.5 text-[0.82rem] text-ink-500">
+              <CalendarIcon size={13} className="text-brand-500" />
+              Scheduled for
+            </dt>
+            <dd className="text-right text-[0.86rem] font-semibold text-brand-700">
+              {new Intl.DateTimeFormat('en-IN', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+                timeZone: 'Asia/Kolkata',
+              }).format(new Date(booking.scheduledAt))}
+            </dd>
+          </div>
+        )}
         <div className="flex items-start justify-between gap-4 px-5 py-3.5">
           <dt className="shrink-0 text-[0.82rem] text-ink-500">Address</dt>
           <dd className="text-right text-[0.86rem] leading-relaxed text-ink-800">

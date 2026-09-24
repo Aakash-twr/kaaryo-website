@@ -14,7 +14,7 @@ import {
 } from '../../lib/email'
 import { SITE } from '../../data/site'
 import { CloseIcon, ArrowRightIcon } from '../icons/UiIcons'
-import { LockIcon, ShieldIcon } from '../icons/FeatureIcons'
+import { LockIcon, ShieldIcon, ClockIcon, CalendarIcon } from '../icons/FeatureIcons'
 
 const PANEL = {
   hidden: { opacity: 0, y: 28, scale: 0.98 },
@@ -30,9 +30,12 @@ export default function BookingModal({ item, cat, onClose }) {
   const [status, setStatus] = useState('editing') // editing | sending | done | error
   const [failure, setFailure] = useState(null)
   const [confirmed, setConfirmed] = useState(null)
+  const [clampWarning, setClampWarning] = useState(null) // transient time-clamp notice
 
   const dialogRef = useRef(null)
   const closeRef = useRef(null)
+  const scheduledAtRef = useRef(null)
+  const clampTimerRef = useRef(null)
   const titleId = 'booking-modal-title'
 
   const quote = useMemo(() => buildQuote({ item, cat, hours }), [item, cat, hours])
@@ -179,6 +182,36 @@ export default function BookingModal({ item, cat, onClose }) {
                     Tell us where to send your professional. We confirm the price before
                     anyone sets off.
                   </p>
+
+                  {/* ── Instant / Schedule toggle ── */}
+                  <div className="mt-5 inline-flex items-center rounded-2xl border border-ink-900/10 bg-paper-100 p-1 gap-1">
+                    <button
+                      type="button"
+                      id="schedule-instant"
+                      onClick={() => setForm((p) => ({ ...p, scheduleType: 'instant', scheduledAt: '' }))}
+                      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[0.84rem] font-semibold transition-all duration-200 ${
+                        form.scheduleType === 'instant'
+                          ? 'bg-brand-700 text-paper-50 shadow-[0_6px_18px_-8px_rgba(15,23,42,0.55)]'
+                          : 'text-ink-600 hover:text-ink-900'
+                      }`}
+                    >
+                      <ClockIcon size={15} />
+                      Book now
+                    </button>
+                    <button
+                      type="button"
+                      id="schedule-later"
+                      onClick={() => setForm((p) => ({ ...p, scheduleType: 'scheduled' }))}
+                      className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[0.84rem] font-semibold transition-all duration-200 ${
+                        form.scheduleType === 'scheduled'
+                          ? 'bg-brand-700 text-paper-50 shadow-[0_6px_18px_-8px_rgba(15,23,42,0.55)]'
+                          : 'text-ink-600 hover:text-ink-900'
+                      }`}
+                    >
+                      <CalendarIcon size={15} />
+                      Schedule
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid gap-7 px-6 py-7 sm:px-8 lg:grid-cols-[1.1fr_0.9fr]">
@@ -190,6 +223,112 @@ export default function BookingModal({ item, cat, onClose }) {
                       onValidityChange={setErrors}
                       submitted={submitted}
                     />
+
+                    {/* Schedule date-time picker — revealed when "Schedule" mode is active */}
+                    {form.scheduleType === 'scheduled' && (
+                      <div className="booking-fields-reveal mt-5">
+                        <Field
+                          id="scheduledAt"
+                          label="Date & time"
+                          hint="Available between 7:00 AM and 10:00 PM"
+                          error={submitted ? errors.scheduledAt : undefined}
+                        >
+                          <div className="booking-dt-wrapper">
+                            <span className="booking-dt-icon">
+                              <CalendarIcon size={16} />
+                            </span>
+                            <input
+                              ref={scheduledAtRef}
+                              id="scheduledAt"
+                              type="datetime-local"
+                              min={(() => {
+                                const pad = (n) => String(n).padStart(2, '0')
+                                const dt = new Date(Date.now() + 60 * 60 * 1000)
+                                const h = dt.getHours()
+                                if (h < 7) {
+                                  dt.setHours(7, 0, 0, 0)
+                                } else if (h >= 22) {
+                                  dt.setDate(dt.getDate() + 1)
+                                  dt.setHours(7, 0, 0, 0)
+                                }
+                                return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`
+                              })()}
+                              value={form.scheduledAt}
+                              onClick={() => scheduledAtRef.current?.showPicker?.()}
+                              onChange={(e) => {
+                                let value = e.target.value
+                                let warned = null
+                                if (value) {
+                                  // Auto-clamp to service hours: 7:00 AM – 10:00 PM
+                                  const dt = new Date(value)
+                                  const h = dt.getHours()
+                                  const m = dt.getMinutes()
+                                  if (h < 7) {
+                                    dt.setHours(7, 0, 0, 0)
+                                    warned = 'Time adjusted to 7:00 AM — our earliest slot.'
+                                  } else if (h > 22 || (h === 22 && m > 0)) {
+                                    dt.setHours(22, 0, 0, 0)
+                                    warned = 'Time adjusted to 10:00 PM — our latest slot.'
+                                  }
+                                  const pad = (n) => String(n).padStart(2, '0')
+                                  value = `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}`
+                                }
+                                if (warned) {
+                                  setClampWarning(warned)
+                                  clearTimeout(clampTimerRef.current)
+                                  clampTimerRef.current = setTimeout(() => setClampWarning(null), 3500)
+                                } else {
+                                  setClampWarning(null)
+                                }
+                                const next = { ...form, scheduledAt: value }
+                                setForm(next)
+                                if (submitted) setErrors(validateBooking(next))
+                              }}
+                              className={`booking-dt-input ${
+                                submitted && errors.scheduledAt
+                                  ? 'border-danger-500/60 focus:ring-danger-500/30'
+                                  : ''
+                              }`}
+                            />
+                          </div>
+                        </Field>
+
+                        {/* Auto-dismiss clamp warning */}
+                        <AnimatePresence>
+                          {clampWarning && (
+                            <m.p
+                              key="clamp-warn"
+                              initial={{ opacity: 0, y: -6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -4 }}
+                              transition={{ duration: 0.22 }}
+                              className="mt-2 flex items-start gap-1.5 rounded-xl border border-warning-500/30 bg-warning-100/70 px-3 py-2 text-[0.78rem] leading-snug text-warning-700"
+                            >
+                              <span aria-hidden="true" className="mt-px shrink-0 text-[0.9rem]">⚠️</span>
+                              {clampWarning} Services run 7:00 AM – 10:00 PM.
+                            </m.p>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
+
+                    {/* Landmark — visible only on mobile/tablet (hidden at lg+, shown in right col there) */}
+                    {pinIsValid && (
+                      <div className="booking-fields-reveal mt-5 lg:hidden">
+                        <Field id="landmark-mobile" label="Landmark" optional>
+                          <input
+                            id="landmark-mobile"
+                            type="text"
+                            placeholder="Opposite the Reliance Fresh"
+                            value={form.landmark ?? ''}
+                            onChange={(e) =>
+                              setForm((prev) => ({ ...prev, landmark: e.target.value }))
+                            }
+                            className={`${FIELD} ${OK}`}
+                          />
+                        </Field>
+                      </div>
+                    )}
 
                     <p className="mt-5 flex items-start gap-2 text-[0.76rem] leading-relaxed text-ink-500">
                       <LockIcon size={14} className="mt-0.5 shrink-0 text-brand-500" />
@@ -209,8 +348,9 @@ export default function BookingModal({ item, cat, onClose }) {
                   <div className="space-y-5 lg:sticky lg:top-6 lg:h-fit">
                     <PriceBreakdown quote={quote} hours={hours} onHoursChange={setHours} />
 
+                    {/* Landmark — visible only on desktop (lg+), shown in left col on mobile) */}
                     {pinIsValid && (
-                      <div className="booking-fields-reveal">
+                      <div className="booking-fields-reveal hidden lg:block">
                         <Field id="landmark" label="Landmark" optional>
                           <input
                             id="landmark"

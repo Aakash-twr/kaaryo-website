@@ -3,10 +3,11 @@ import { CATEGORIES } from '../../data/services'
 /**
  * Rates are derived from the real service catalogue rather than invented:
  * average ₹/minute across a category × 60 gives the gross hourly rate.
- * WORKER_SHARE is what the professional keeps; BILLABLE is the share of
- * online hours that turn into paid work once travel and gaps are counted.
+ * WORKER_SHARE is what the professional keeps (90%); Kaaryo retains 10%.
+ * BILLABLE is the share of online hours that turn into paid work once travel
+ * and gaps are counted.
  */
-export const WORKER_SHARE = 0.72
+export const WORKER_SHARE = 0.9
 export const BILLABLE = 0.35
 export const BONUS_RATE = 0.08
 
