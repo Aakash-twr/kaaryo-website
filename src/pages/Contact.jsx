@@ -20,7 +20,7 @@ export default function Contact() {
         body="Support in Hindi, English, Marathi, Kannada and Tamil, around the clock. Whether it is a booking going sideways or a housing society with two hundred flats, someone here can help."
       />
 
-      <section className="bg-paper-50 pb-20 sm:pb-24">
+      <section id="contact-form-section" className="bg-paper-50 pb-20 sm:pb-24">
         <div className="container-k">
           <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-7">
             <ContactForm />

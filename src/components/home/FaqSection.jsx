@@ -6,8 +6,23 @@ import { FAQS } from '../../data/faqs'
 import { SITE } from '../../data/site'
 import { HeadsetIcon, MailIcon } from '../icons/FeatureIcons'
 import { ArrowRightIcon } from '../icons/UiIcons'
+import { useLocation } from 'react-router-dom'
 
 export default function FaqSection({ items = FAQS }) {
+  const location = useLocation()
+  const isContactPage = location.pathname === '/contact'
+  
+  const handleContactSupport = (e) => {
+    if (isContactPage) {
+      e.preventDefault()
+      const formSection = document.getElementById('contact-form-section')
+      if (formSection) {
+        const top = formSection.getBoundingClientRect().top + window.scrollY - 80
+        window.scrollTo({ top, behavior: 'smooth' })
+      }
+    }
+  }
+
   return (
     <section className="relative bg-paper-100 py-20 sm:py-24">
       <div className="container-k">
@@ -42,7 +57,12 @@ export default function FaqSection({ items = FAQS }) {
                   <MailIcon size={15} />
                   {SITE.supportEmail}
                 </a>
-                <Button to="/contact" variant="outline" size="sm" className="mt-5 w-full">
+                <Button 
+                  {...(isContactPage ? { onClick: handleContactSupport } : { to: '/contact' })} 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-5 w-full"
+                >
                   Contact support
                   <ArrowRightIcon size={15} />
                 </Button>

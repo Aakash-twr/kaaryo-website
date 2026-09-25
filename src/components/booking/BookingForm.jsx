@@ -130,22 +130,29 @@ export default function BookingForm({ form, onChange, errors, onValidityChange, 
 
       {/* Step 1: Pin your location on the map */}
       <div className="sm:col-span-2">
-        <Suspense
-          fallback={
-            <div className="location-picker" style={{ padding: '2rem', textAlign: 'center' }}>
-              <span className="location-picker__spinner" aria-hidden="true" />
-              <span style={{ marginLeft: '0.5rem', fontSize: '0.82rem', color: 'var(--color-ink-500)' }}>
-                Loading map…
-              </span>
-            </div>
-          }
+        <Field
+          id="location"
+          label="Pin your exact location"
+          hint="Move the map or search to drop a pin."
+          error={shown('location')}
         >
-          <LocationPicker
-            city={form.city}
-            onLocationChange={handleLocationChange}
-            initialCoords={form.location}
-          />
-        </Suspense>
+          <Suspense
+            fallback={
+              <div className="location-picker" style={{ padding: '2rem', textAlign: 'center' }}>
+                <span className="location-picker__spinner" aria-hidden="true" />
+                <span style={{ marginLeft: '0.5rem', fontSize: '0.82rem', color: 'var(--color-ink-500)' }}>
+                  Loading map…
+                </span>
+              </div>
+            }
+          >
+            <LocationPicker
+              city={form.city}
+              onLocationChange={handleLocationChange}
+              initialCoords={form.location}
+            />
+          </Suspense>
+        </Field>
       </div>
 
       {/* Step 2: Address field — revealed only after a valid pin is placed */}

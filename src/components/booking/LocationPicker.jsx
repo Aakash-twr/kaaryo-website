@@ -31,6 +31,7 @@ export default function LocationPicker({ city, onLocationChange, initialCoords }
   const [locationLabel, setLocationLabel] = useState(null)
   const [outOfArea, setOutOfArea] = useState(false)
   const [hasPin, setHasPin] = useState(false)
+  const [currentZoom, setCurrentZoom] = useState(initialCoords ? 15 : 10)
 
   /**
    * Every time the pin moves, check if it falls within any live city boundary.
@@ -104,7 +105,9 @@ export default function LocationPicker({ city, onLocationChange, initialCoords }
         attributionControl: false,
         scrollWheelZoom: true,
       })
-      L.control.zoom({ position: 'bottomright' }).addTo(map)
+      map.on('zoomend', () => {
+        setCurrentZoom(map.getZoom())
+      })
       L.tileLayer(MAP_TILE, { attribution: MAP_ATTR, maxZoom: 19 }).addTo(map)
 
       // Add official city boundary polygons for all live cities
@@ -272,6 +275,46 @@ export default function LocationPicker({ city, onLocationChange, initialCoords }
               <path d="M12 16v-4M12 8h.01"/>
             </svg>
             Tap on the map to drop a pin
+          </div>
+        )}
+
+        {/* Modern floating zoom controls */}
+        {ready && (
+          <div className="location-picker__zoom-controls" role="group" aria-label="Map zoom controls">
+            <button
+              type="button"
+              className="location-picker__zoom-btn location-picker__zoom-btn--in"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                mapRef.current?.zoomIn()
+              }}
+              disabled={currentZoom >= 19}
+              aria-label="Zoom in"
+              title="Zoom in"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+            <div className="location-picker__zoom-divider" aria-hidden="true" />
+            <button
+              type="button"
+              className="location-picker__zoom-btn location-picker__zoom-btn--out"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                mapRef.current?.zoomOut()
+              }}
+              disabled={currentZoom <= 3}
+              aria-label="Zoom out"
+              title="Zoom out"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
           </div>
         )}
       </div>

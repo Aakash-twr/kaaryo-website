@@ -41,7 +41,9 @@ export function validateBooking(form) {
     errors.address = 'Add the flat or house number, building and street.'
   }
 
-  if (form.location?.outOfArea) {
+  if (!form.location) {
+    errors.location = 'Please pin your exact location on the map.'
+  } else if (form.location.outOfArea) {
     errors.location = 'We don\u2019t serve this area yet. Pin a location in Hyderabad, Delhi or Bengaluru.'
   }
 
